@@ -1,46 +1,31 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QLabel
-from styles.theme import STYLE
-from views.sidebar import Sidebar
+from components.layout.sidebar import Sidebar
+from core.config import APP_NAME, WINDOW_HEIGHT, WINDOW_WIDTH
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("MoneyZe")
-        self.resize(1200, 700)
+        self.setWindowTitle(APP_NAME)
+        self.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
+
+        self._setup_ui()
+
+
+    def _setup_ui(self):
 
         central_widget = QWidget()
+
         self.setCentralWidget(central_widget)
-
-        main_layout = QHBoxLayout()
-        central_widget.setLayout(main_layout)
-
+        self.main_layout = QHBoxLayout()
+        central_widget.setLayout(self.main_layout)
         self.sidebar = Sidebar()
+        self.content_widget = QWidget()
+        self.content_layout = QHBoxLayout()
+        self.content_widget.setLayout(self.content_layout)
+        self.main_layout.addWidget(self.sidebar)
+        self.main_layout.addWidget(self.content_widget)
 
-        content = QWidget()
-        content_layout = QVBoxLayout()
-        content.setLayout(content_layout)
-
-        titulo = QLabel("MoneyZe 💰")
-        titulo.setStyleSheet("""
-            font-size: 28px;
-            font-weight: bold;
-        """)
-
-        subtitulo = QLabel("Bem-vindo")
-        subtitulo.setStyleSheet("""
-            font-size: 18px;
-            color: gray;
-        """)
-
-        content_layout.addWidget(titulo)
-        content_layout.addWidget(subtitulo)
-        content_layout.addStretch()
-
-        main_layout.addWidget(self.sidebar)
-        main_layout.addWidget(content, 1)
-        
-        self.setStyleSheet(STYLE)
         
 
 
