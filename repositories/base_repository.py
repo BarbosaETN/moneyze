@@ -25,6 +25,8 @@ class BaseRepository:
         self.session.commit()
         self.session.refresh(entity)
 
+        return entity
+
     def delete(self, entity):
         self.session.delete(entity)
         self.session.commit()

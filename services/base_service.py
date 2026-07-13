@@ -12,4 +12,4 @@ class BaseService:
         return self.repository.get_by_id(entity_id)
 
     def delete(self, entity):
-        self.repository.delete(entity)
+         return self.repository.delete(entity)
