@@ -20,5 +20,7 @@ class BasePage(QWidget):
         self.content = QWidget()
 
         self.content_layout = QVBoxLayout(self.content)
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.content_layout.setSpacing(20)
 
         self.main_layout.addWidget(self.content)
