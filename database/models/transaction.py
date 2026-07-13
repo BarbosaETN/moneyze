@@ -38,7 +38,7 @@ class Transaction(Base):
 
     category = relationship(
         "Category",
-        back_populates="transaction"
+        back_populates="transactions"
     )
 
     

@@ -4,10 +4,12 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from database.connection import get_session
+from repositories.category_repository import CategoryRepository
+from services.category_service import CategoryService
 from components.buttons.primary_button import PrimaryButton
 from components.containers.category_grid import CategoryGrid
 from components.dialogs.category_dialog import CategoryDialog
-from data.demo.category_demo import DEMO_CATEGORIES
 from views.base.base_page import BasePage
 
 
@@ -18,6 +20,9 @@ class CategoryPage(BasePage):
             "Categorias",
             "Gerencie suas categorias financeiras."
         )
+        self.session = get_session()
+        repository = CategoryRepository(self.session)
+        self.category_service = CategoryService(repository)
 
         self._setup_page()
         self._connect_signals()
@@ -57,7 +62,22 @@ class CategoryPage(BasePage):
     def load_categories(self):
 
         categories= self.category_service.get_all()
-        self.category_grid.set_categories(categories)
+
+        cards = []
+
+        for category in categories:
+
+            cards.append({
+
+                "name": category.name,
+
+                "budget": 0,
+
+                "spent": 0,
+
+            })    
+
+        self.category_grid.set_categories(cards)
 
     def _connect_signals(self):
 
@@ -71,6 +91,10 @@ class CategoryPage(BasePage):
 
         if dialog.exec():
 
-            data = dialog.get_data()
+            try:
+                data = dialog.get_data()
 
-            print(data)
+                self.category_service.create(**data)
+                self.load_categories()
+            except Exception as error:
+                print(error)
