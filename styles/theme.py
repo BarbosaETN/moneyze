@@ -1,30 +1,21 @@
-STYLE = """
-QMainWindow {
-    background-color: #363232;
-}
+from styles.button import BUTTON_STYLE
 
-QWidget {
-    font-size: 14px;
-}
+from styles.card import CARD_STYLE
 
-#sidebar {
-    background-color: #2f3542;
-}
+from styles.header import HEADER_STYLE
 
-QPushButton {
-    background-color: transparent;
-    color: white;
-    border: none;
-    padding: 12px;
-    text-align: left;
-    font-size: 14px;
-}
+from styles.sidebar import SIDEBAR_STYLE
 
-QPushButton:hover {
-    background-color: #57606f;
-}
 
-QLabel {
-    color: #2fbf1f;
-}
+THEME = f"""
+{BUTTON_STYLE}
+
+{CARD_STYLE}
+
+{HEADER_STYLE}
+
+{SIDEBAR_STYLE}
 """
+
+def apply_theme(app):
+    app.setStyleSheet(THEME)
