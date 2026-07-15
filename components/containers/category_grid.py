@@ -1,3 +1,4 @@
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
     QGridLayout,
     QScrollArea,
@@ -8,6 +9,8 @@ from components.cards.category_card import CategoryCard
 
 
 class CategoryGrid(QScrollArea):
+
+    delete_requested = Signal(int)
 
     def __init__(self):
         super().__init__()
@@ -38,9 +41,14 @@ class CategoryGrid(QScrollArea):
             column = index % columns
 
             card = CategoryCard(
+                category_id=category["id"],
                 name=category["name"],
                 budget=category["budget"],
                 spent=category["spent"],
+            )
+
+            card.delete_requested.connect(
+                self._on_delete_requested
             )
 
             self.grid_layout.addWidget(card, row, column)
@@ -53,3 +61,6 @@ class CategoryGrid(QScrollArea):
 
             if item.widget():
                 item.widget().deleteLater()
+
+    def _on_delete_requested(self, category_id: int):
+        self.delete_requested.emit(category_id)

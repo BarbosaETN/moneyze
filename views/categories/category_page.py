@@ -2,8 +2,10 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QWidget,
+    QMessageBox
 )
 
+from exceptions.moneyze_error import MoneyzeError
 from database.connection import get_session
 from repositories.category_repository import CategoryRepository
 from services.category_service import CategoryService
@@ -69,6 +71,8 @@ class CategoryPage(BasePage):
 
             cards.append({
 
+                "id": category.id,
+
                 "name": category.name,
 
                 "budget": 0,
@@ -85,6 +89,10 @@ class CategoryPage(BasePage):
             self._open_category_dialog
         )
 
+        self.category_grid.delete_requested.connect(
+            self._delete_category
+        )
+
     def _open_category_dialog(self):
 
         dialog = CategoryDialog()
@@ -98,3 +106,31 @@ class CategoryPage(BasePage):
                 self.load_categories()
             except Exception as error:
                 print(error)
+
+
+    def _delete_category(self, category_id: int):
+
+        reply = QMessageBox.question(
+            self,
+            "Exluir categoria",
+            "Deseja realmente excluir esta categoria?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No,
+        )
+
+        if reply == QMessageBox.No:
+            return
+
+        try:
+
+            self.category_service.delete_by_id(category_id)
+
+            self.load_categories()
+
+        except MoneyzeError as error:
+
+            QMessageBox.warning(
+                self,
+                error.title,
+                error.message,
+            )

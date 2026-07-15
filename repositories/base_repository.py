@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
+from typing import Type
 
 class BaseRepository:
 
-    def __init__(self, session: Session, model):
+    def __init__(self, session: Session, model: Type):
         self.session = session
         self.model = model
 
@@ -30,3 +31,5 @@ class BaseRepository:
     def delete(self, entity):
         self.session.delete(entity)
         self.session.commit()
+
+        return True

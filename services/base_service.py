@@ -1,5 +1,7 @@
+from repositories.base_repository import BaseRepository
+
 class BaseService:
-    def __init__(self, repository):
+    def __init__(self, repository: BaseRepository):
         self.repository = repository
 
     def create(self, **data):
@@ -13,3 +15,12 @@ class BaseService:
 
     def delete(self, entity):
          return self.repository.delete(entity)
+
+    def delete_by_id(self, entity_id):
+
+        entity = self.get_by_id(entity_id)
+
+        if entity is None:
+            return
+
+        return self.delete(entity)

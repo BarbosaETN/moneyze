@@ -1,6 +1,9 @@
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
     QLabel,
     QProgressBar,
+    QPushButton,
+    QHBoxLayout
 )
 
 from components.cards.base_card import BaseCard
@@ -8,14 +11,18 @@ from components.cards.base_card import BaseCard
 
 class CategoryCard(BaseCard):
 
+    delete_requested = Signal(int)
+
     def __init__(
         self,
+        category_id: int,
         name: str,
         budget: float,
         spent: float,
     ):
         super().__init__()
 
+        self.category_id = category_id
         self.name = name
         self.budget = budget
         self.spent = spent
@@ -53,10 +60,23 @@ class CategoryCard(BaseCard):
 
     def _create_header(self):
 
+        header_layout = QHBoxLayout()
+
         title = QLabel(self.name)
         title.setObjectName("categoryTitle")
 
-        self.layout.addWidget(title)
+        self.delete_button = QPushButton("🗑")
+        self.delete_button.setObjectName("deleteButton")
+
+        self.delete_button.clicked.connect(
+            self._request_delete
+        )
+
+        header_layout.addWidget(title)
+        header_layout.addStretch()
+        header_layout.addWidget(self.delete_button)
+
+        self.layout.addLayout(header_layout)
 
     def _create_section(
         self,
@@ -84,3 +104,6 @@ class CategoryCard(BaseCard):
         progress.setValue(int(self.percentage))
 
         self.layout.addWidget(progress)
+
+    def _request_delete(self):
+        self.delete_requested.emit(self.category_id)

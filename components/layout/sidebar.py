@@ -2,6 +2,7 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QLabel, QPushButton, QVBoxLayout, QWidget
 
 from components.layout.navigation import NAVIGATION
+from core.config import SIDEBAR_WIDTH
 
 
 class Sidebar(QWidget):
@@ -12,7 +13,7 @@ class Sidebar(QWidget):
         super().__init__()
 
         self.setObjectName("sidebar")
-        self.setFixedWidth(250)
+        self.setFixedWidth(SIDEBAR_WIDTH)
 
         self._setup_ui()
 

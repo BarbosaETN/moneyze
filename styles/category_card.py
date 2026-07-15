@@ -3,12 +3,13 @@ CATEGORY_CARD_STYLE = """
 
     font-size: 18px;
     font-weight: bold;
+    color: black;
 
 }
 
 #categorySectionTitle {
 
-    color: #6B7280;
+    color: #f5f5f5;
 
     font-size: 12px;
 

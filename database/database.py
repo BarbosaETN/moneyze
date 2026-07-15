@@ -6,3 +6,6 @@ from database.models.transaction import Transaction
 
 def initialize_database():
     Base.metadata.create_all(bind=engine)
+    """
+     Cria todas as tabelas da aplicação caso ainda não existam.
+    """
