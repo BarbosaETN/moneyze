@@ -1,8 +1,7 @@
 class MoneyzeError(Exception):
-    def __init(self, title: str, message: str):
-        self.title = title
-        self.message = message
 
+    def __init__(self, message: str):
+        self.message = message
         super().__init__(message)
 
     def __str__(self):
