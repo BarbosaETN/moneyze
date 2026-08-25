@@ -55,7 +55,6 @@ class IncomePage(BasePage):
 
         self.transaction_service = TransactionService(
             transaction_repository,
-            category_repository,
         )
 
         self.category_service = CategoryService(
