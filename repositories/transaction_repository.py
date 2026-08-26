@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import select
+from sqlalchemy import or_, select
 
 from database.models.transaction import Transaction
 from enums.transaction_type import TransactionType
@@ -12,19 +12,18 @@ class TransactionRepository(BaseRepository):
     def __init__(self, session):
         super().__init__(session, Transaction)
 
-    def get_by_type(
-        self,
-        transaction_type: TransactionType,
-    ):
+    def get_by_type(self, transaction_type):
 
-        statement = (
-            select(Transaction)
-            .where(
-                Transaction.transaction_type == transaction_type
+        return (
+            self.session.query(self.model)
+            .filter(
+                self.model.transaction_type == transaction_type
             )
+            .order_by(
+                self.model.transaction_date.desc()
+            )
+            .all()
         )
-
-        return self.session.scalars(statement).all()
 
     def get_by_category(
         self,
@@ -42,18 +41,58 @@ class TransactionRepository(BaseRepository):
 
     def get_by_date_range(
         self,
-        start_date: date,
-        end_date: date,
+        start_date,
+        end_date,
+    ):
+
+        return (
+            self.session.query(self.model)
+            .filter(
+                self.model.transaction_date >= start_date,
+                self.model.transaction_date <= end_date,
+            )
+            .order_by(
+                self.model.transaction_date.desc()
+            )
+            .all()
+        )
+
+    def get_all_ordered(self):
+
+        statement = (
+            select(Transaction)
+            .order_by(
+                Transaction.transaction_date.desc()
+            )
+        )
+
+        return self.session.scalars(
+            statement
+        ).all()
+
+
+    def search_by_description(
+        self,
+        text: str,
     ):
 
         statement = (
             select(Transaction)
             .where(
-                Transaction.transaction_date.between(
-                    start_date,
-                    end_date,
+                or_(
+                    Transaction.title.ilike(
+                        f"%{text}%"
+                    ),
+                    Transaction.description.ilike(
+                        f"%{text}%"
+                    ),
                 )
+            )
+            .order_by(
+                Transaction.transaction_date.desc()
             )
         )
 
-        return self.session.scalars(statement).all()
+        return self.session.scalars(
+            statement
+        ).all()
