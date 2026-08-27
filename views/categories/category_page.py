@@ -1,12 +1,14 @@
+from calendar import monthrange
 from datetime import date
+import qtawesome as qta
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QHBoxLayout,
+    QLabel,
     QMessageBox,
-    QWidget,
     QPushButton,
-    QLabel
+    QWidget,
 )
 
 from components.buttons.primary_button import PrimaryButton
@@ -26,19 +28,31 @@ from services.category_service import CategoryService
 
 from views.base.base_page import BasePage
 
-from calendar import monthrange
-from datetime import date
-
 
 class CategoryPage(BasePage):
 
     def __init__(self):
+
         super().__init__(
             "Categorias",
             "Gerencie suas categorias financeiras.",
         )
 
         self.session = get_session()
+
+        self._create_services()
+
+        today = date.today()
+
+        self.selected_year = today.year
+        self.selected_month = today.month
+
+        self._setup_page()
+        self._connect_signals()
+
+        self.load_categories()
+
+    def _create_services(self):
 
         category_repository = CategoryRepository(
             self.session
@@ -53,62 +67,19 @@ class CategoryPage(BasePage):
             transaction_repository,
         )
 
-        today = date.today()
-
-        self.selected_year = today.year
-        self.selected_month = today.month
-
-        self._setup_page()
-        self._connect_signals()
-        self.load_categories()
-
     def _setup_page(self):
 
         self._create_month_selector()
         self._create_toolbar()
         self._create_grid()
 
-    def _create_toolbar(self):
-
-        self.toolbar = QWidget()
-
-        self.toolbar_layout = QHBoxLayout(
-            self.toolbar
-        )
-
-        self.toolbar_layout.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
-
-        self.toolbar_layout.addStretch()
-
-        self.new_category_button = PrimaryButton(
-            "+ Nova Categoria"
-        )
-
-        self.toolbar_layout.addWidget(
-            self.new_category_button,
-            alignment=Qt.AlignmentFlag.AlignRight,
-        )
-
-        self.content_layout.addWidget(
-            self.toolbar
-        )
-
-    def _create_grid(self):
-
-        self.category_grid = CategoryGrid()
-
-        self.content_layout.addWidget(
-            self.category_grid
-        )
-
     def _create_month_selector(self):
 
         self.month_selector = QWidget()
+
+        self.month_selector.setObjectName(
+            "monthSelector"
+        )
 
         self.month_selector_layout = QHBoxLayout(
             self.month_selector
@@ -121,12 +92,26 @@ class CategoryPage(BasePage):
             0,
         )
 
-        self.previous_month_button = QPushButton(
-            "<"
+        self.month_selector_layout.setSpacing(
+            12
         )
+
+        self.previous_month_button = QPushButton()
 
         self.previous_month_button.setObjectName(
             "monthNavigationButton"
+        )
+
+        self.previous_month_button.setIcon(
+            qta.icon(
+                "fa5s.chevron-left",
+                color="#94A3B8",
+            )
+        )
+
+        self.previous_month_button.setFixedSize(
+            36,
+            36,
         )
 
         self.month_label = QLabel()
@@ -139,12 +124,22 @@ class CategoryPage(BasePage):
             Qt.AlignmentFlag.AlignCenter
         )
 
-        self.next_month_button = QPushButton(
-            ">"
-        )
+        self.next_month_button = QPushButton()
 
         self.next_month_button.setObjectName(
             "monthNavigationButton"
+        )
+
+        self.next_month_button.setIcon(
+            qta.icon(
+                "fa5s.chevron-right",
+                color="#94A3B8",
+            )
+        )
+
+        self.next_month_button.setFixedSize(
+            36,
+            36,
         )
 
         self.month_selector_layout.addStretch()
@@ -167,7 +162,7 @@ class CategoryPage(BasePage):
 
         self.content_layout.addWidget(
             self.month_selector
-        )    
+        )
 
     def _update_month_label(self):
 
@@ -192,24 +187,48 @@ class CategoryPage(BasePage):
 
         self.month_label.setText(
             f"{month_name} {self.selected_year}"
-        )    
-
-    def load_categories(self):
-
-        start_date, end_date = (
-            self._get_selected_month_range()
         )
 
-        categories = (
-            self.category_service
-            .get_categories_with_summary(
-                start_date=start_date,
-                end_date=end_date,
-            )
+    def _create_toolbar(self):
+
+        self.toolbar = QWidget()
+
+        self.toolbar.setObjectName(
+            "categoryToolbar"
         )
 
-        self.category_grid.set_categories(
-            categories
+        self.toolbar_layout = QHBoxLayout(
+            self.toolbar
+        )
+
+        self.toolbar_layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
+        self.new_category_button = PrimaryButton(
+            "Nova Categoria",
+            "fa5s.plus",
+        )
+
+        self.toolbar_layout.addStretch()
+
+        self.toolbar_layout.addWidget(
+            self.new_category_button
+        )
+
+        self.content_layout.addWidget(
+            self.toolbar
+        )
+
+    def _create_grid(self):
+
+        self.category_grid = CategoryGrid()
+
+        self.content_layout.addWidget(
+            self.category_grid
         )
 
     def _connect_signals(self):
@@ -241,7 +260,7 @@ class CategoryPage(BasePage):
 
         self._update_month_label()
 
-        self.load_categories() 
+        self.load_categories()
 
     def _go_to_next_month(self):
 
@@ -254,7 +273,49 @@ class CategoryPage(BasePage):
 
         self._update_month_label()
 
-        self.load_categories()       
+        self.load_categories()
+
+    def load_categories(self):
+
+        start_date, end_date = (
+            self._get_selected_month_range()
+        )
+
+        categories = (
+            self.category_service
+            .get_categories_with_summary(
+                start_date=start_date,
+                end_date=end_date,
+            )
+        )
+
+        self.category_grid.set_categories(
+            categories
+        )
+
+    def _get_selected_month_range(self):
+
+        start_date = date(
+            self.selected_year,
+            self.selected_month,
+            1,
+        )
+
+        last_day = monthrange(
+            self.selected_year,
+            self.selected_month,
+        )[1]
+
+        end_date = date(
+            self.selected_year,
+            self.selected_month,
+            last_day,
+        )
+
+        return (
+            start_date,
+            end_date,
+        )
 
     def open_create_dialog(self):
 
@@ -313,24 +374,3 @@ class CategoryPage(BasePage):
                 error.title,
                 error.message,
             )
-
-    def _get_selected_month_range(self):
-
-        start_date = date(
-            self.selected_year,
-            self.selected_month,
-            1,
-        )
-
-        last_day = monthrange(
-            self.selected_year,
-            self.selected_month,
-        )[1]
-
-        end_date = date(
-            self.selected_year,
-            self.selected_month,
-            last_day,
-        )
-
-        return start_date, end_date        

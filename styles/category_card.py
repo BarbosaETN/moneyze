@@ -1,86 +1,147 @@
-CATEGORY_CARD_STYLE = """
-#categoryTitle {
+from styles.colors import (
+    TEXT,
+    SECONDARY_TEXT,
+    SUCCESS,
+    WARNING,
+    DANGER,
+)
+
+
+CATEGORY_CARD_STYLE = f"""
+
+#categoryTitle {{
+
+    color: {TEXT};
 
     font-size: 18px;
-    font-weight: bold;
-    color: black;
 
-}
-
-#categorySectionTitle {
-
-    color: #f5f5f5;
-    font-size: 12px;
-
-}
-
-#categorySectionValue {
-
-    font-size: 15px;
     font-weight: bold;
 
-}
+}}
 
-#categoryPercentage {
 
-    font-size: 12px;
-    color: #6B7280;
+#categoryBudget {{
 
-}
+    color: {SECONDARY_TEXT};
 
-#categoryBudgetWarning {
+    font-size: 13px;
 
-    color: #E74C3C;
-    font-weight: bold;
-    font-size: 12px;
-    margin-top: 4px;
+}}
 
-}
 
-#categoryExceededValue {
+#categorySectionTitle {{
 
-    color: #E74C3C;
-    font-size: 15px;
-    font-weight: bold;
+    color: {SECONDARY_TEXT};
 
-}
+    font-size: 13px;
 
-#categoryExceededPercentage {
+}}
 
-    color: #E74C3C;
-    font-size: 12px;
+
+#categoryExpenseValue {{
+
+    color: {TEXT};
+
+    font-size: 16px;
+
     font-weight: bold;
 
-}
+}}
 
-#categoryEmptyTitle {
 
-    font-size: 20px;
+#categoryPercentage {{
+
+    font-size: 13px;
+
     font-weight: bold;
-    color: #111827;
 
-}
+}}
 
-#categoryEmptyDescription {
 
-    font-size: 14px;
-    color: #6B7280;
+#categoryPercentage[budgetStatus="success"] {{
 
-}
+    color: {SUCCESS};
 
-QProgressBar#categoryProgress {
+}}
+
+
+#categoryPercentage[budgetStatus="warning"] {{
+
+    color: {WARNING};
+
+}}
+
+
+#categoryPercentage[budgetStatus="danger"] {{
+
+    color: {DANGER};
+
+}}
+
+
+#categoryRemaining {{
+
+    color: {SECONDARY_TEXT};
+
+    font-size: 13px;
+
+}}
+
+
+QPushButton#categoryDeleteButton {{
+
+    background-color: transparent;
 
     border: none;
-    background: #E5E7EB;
-    border-radius: 6px;
-    height: 10px;
 
-}
+    border-radius: 8px;
 
-QProgressBar#categoryProgress::chunk {
+}}
 
-    background: #22C55E;
-    border-radius: 6px;
 
-}
+QPushButton#categoryDeleteButton:hover {{
+
+    background-color: rgba(239, 68, 68, 0.15);
+
+}}
+
+
+QFrame#baseCard[budgetStatus="warning"] {{
+
+    border: 1px solid {WARNING};
+
+}}
+
+
+QFrame#baseCard[budgetStatus="danger"] {{
+
+    border: 1px solid {DANGER};
+
+}}
+
+QScrollArea#categoryGrid {{
+
+    background-color: transparent;
+
+    border: none;
+
+}}
+
+
+QWidget#categoryGridContainer {{
+
+    background-color: transparent;
+
+}}
+
+#categoryExceeded {{
+
+    color: {DANGER};
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+}}
+
 """

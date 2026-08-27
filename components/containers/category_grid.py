@@ -1,4 +1,5 @@
 from PySide6.QtCore import Qt, Signal
+
 from PySide6.QtWidgets import (
     QGridLayout,
     QLabel,
@@ -17,6 +18,8 @@ class CategoryGrid(QScrollArea):
     def __init__(self):
         super().__init__()
 
+        self.setObjectName("categoryGrid")
+
         self._setup_ui()
 
     def _setup_ui(self):
@@ -24,6 +27,10 @@ class CategoryGrid(QScrollArea):
         self.setWidgetResizable(True)
 
         self.container = QWidget()
+
+        self.container.setObjectName(
+            "categoryGridContainer"
+        )
 
         self.main_layout = QVBoxLayout(
             self.container
@@ -35,6 +42,8 @@ class CategoryGrid(QScrollArea):
             0,
             0,
         )
+
+        self.main_layout.setSpacing(0)
 
         self._create_grid()
 
@@ -77,8 +86,6 @@ class CategoryGrid(QScrollArea):
             Qt.AlignmentFlag.AlignCenter
         )
 
-        empty_layout.addStretch()
-
         title = QLabel(
             "Nenhuma categoria cadastrada"
         )
@@ -104,6 +111,8 @@ class CategoryGrid(QScrollArea):
             Qt.AlignmentFlag.AlignCenter
         )
 
+        empty_layout.addStretch()
+
         empty_layout.addWidget(
             title
         )
@@ -118,6 +127,8 @@ class CategoryGrid(QScrollArea):
             self.empty_widget
         )
 
+        self.empty_widget.hide()
+
     def set_categories(
         self,
         categories,
@@ -128,20 +139,23 @@ class CategoryGrid(QScrollArea):
         if not categories:
 
             self.grid_widget.hide()
+
             self.empty_widget.show()
 
             return
 
         self.empty_widget.hide()
+
         self.grid_widget.show()
 
-        columns = 3
+        columns = 2
 
         for index, category in enumerate(
             categories
         ):
 
             row = index // columns
+
             column = index % columns
 
             card = CategoryCard(

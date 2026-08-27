@@ -9,17 +9,51 @@ from styles.fonts import (
     FONT_FAMILY,
 )
 
+
 HEADER_STYLE = f"""
-#headerTitle {{
-    color: {TEXT};
-    font-size: {TITLE_SIZE}px;
-    font-weight: bold;
-    font-family: "{FONT_FAMILY}";
+
+#pageHeader {{
+
+    background-color: transparent;
+
 }}
 
-#headerSubtitle {{
-    color: {SECONDARY_TEXT};
-    font-size: {SUBTITLE_SIZE}px;
+
+#headerTitle {{
+
+    color: {TEXT};
+
+    font-size: {TITLE_SIZE}px;
+
+    font-weight: 700;
+
     font-family: "{FONT_FAMILY}";
+
 }}
+
+
+#headerSubtitle {{
+
+    color: {SECONDARY_TEXT};
+
+    font-size: {SUBTITLE_SIZE}px;
+
+    font-family: "{FONT_FAMILY}";
+
+}}
+
+
+#basePage {{
+
+    background-color: #0B1220;
+
+}}
+
+
+#pageContent {{
+
+    background-color: transparent;
+
+}}
+
 """

@@ -8,8 +8,13 @@ from styles.sidebar import SIDEBAR_STYLE
 
 from styles.category_card import CATEGORY_CARD_STYLE
 
+from styles.month_selector import (
+    MONTH_SELECTOR_STYLE,
+)
+
 
 THEME = f"""
+
 {BUTTON_STYLE}
 
 {CARD_STYLE}
@@ -19,6 +24,9 @@ THEME = f"""
 {SIDEBAR_STYLE}
 
 {CATEGORY_CARD_STYLE}
+
+{MONTH_SELECTOR_STYLE}
+
 """
 
 def apply_theme(app):

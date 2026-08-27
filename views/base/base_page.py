@@ -1,26 +1,73 @@
-from PySide6.QtWidgets import QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QVBoxLayout,
+    QWidget,
+)
+
 from components.layout.header import Header
 
 
 class BasePage(QWidget):
 
-    def __init__(self, title: str, subtitle: str = ""):
+    def __init__(
+        self,
+        title: str,
+        subtitle: str = "",
+    ):
         super().__init__()
 
-        self._setup_ui(title, subtitle)
+        self.setObjectName("basePage")
 
-    def _setup_ui(self, title: str, subtitle: str):
+        self._setup_ui(
+            title,
+            subtitle,
+        )
+
+    def _setup_ui(
+        self,
+        title: str,
+        subtitle: str,
+    ):
 
         self.main_layout = QVBoxLayout(self)
 
-        self.header = Header(title, subtitle)
+        self.main_layout.setContentsMargins(
+            22,
+            18,
+            22,
+            22,
+        )
 
-        self.main_layout.addWidget(self.header)
+        self.main_layout.setSpacing(28)
+
+        self.header = Header(
+            title,
+            subtitle,
+        )
+
+        self.main_layout.addWidget(
+            self.header
+        )
 
         self.content = QWidget()
 
-        self.content_layout = QVBoxLayout(self.content)
-        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.content.setObjectName(
+            "pageContent"
+        )
+
+        self.content_layout = QVBoxLayout(
+            self.content
+        )
+
+        self.content_layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
         self.content_layout.setSpacing(20)
 
-        self.main_layout.addWidget(self.content)
+        self.main_layout.addWidget(
+            self.content,
+            1,
+        )

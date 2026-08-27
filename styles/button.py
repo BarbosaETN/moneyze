@@ -1,6 +1,12 @@
-from styles.colors import PRIMARY, PRIMARY_HOVER, PRIMARY_PRESSED
+from styles.colors import (
+    PRIMARY,
+    PRIMARY_HOVER,
+    PRIMARY_PRESSED,
+)
+
 
 BUTTON_STYLE = f"""
+
 QPushButton#primaryButton {{
 
     background-color: {PRIMARY};
@@ -9,11 +15,12 @@ QPushButton#primaryButton {{
 
     border: none;
 
-    border-radius: 10px;
+    border-radius: 8px;
 
-    padding: 12px 20px;
+    padding: 10px 18px;
 
     font-weight: bold;
+
 }}
 
 QPushButton#primaryButton:hover {{
@@ -27,4 +34,5 @@ QPushButton#primaryButton:pressed {{
     background-color: {PRIMARY_PRESSED};
 
 }}
+
 """
