@@ -71,28 +71,65 @@ class TransactionRepository(BaseRepository):
         ).all()
 
 
-    def search_by_description(
-        self,
-        text: str,
-    ):
+    def search_by_description(self, text):
 
-        statement = (
-            select(Transaction)
-            .where(
-                or_(
-                    Transaction.title.ilike(
-                        f"%{text}%"
-                    ),
-                    Transaction.description.ilike(
-                        f"%{text}%"
-                    ),
+        return (
+            self.session.query(self.model)
+            .filter(
+                self.model.description.ilike(
+                    f"%{text}%"
                 )
             )
             .order_by(
-                Transaction.transaction_date.desc()
+                self.model.transaction_date.desc()
             )
+            .all()
         )
 
-        return self.session.scalars(
-            statement
-        ).all()
+    def get_filtered(
+        self,
+        transaction_type=None,
+        start_date=None,
+        end_date=None,
+        search_text=None,
+    ):
+        query = self.session.query(
+            self.model
+        )
+
+        if transaction_type is not None:
+
+            query = query.filter(
+                self.model.transaction_type
+                == transaction_type
+            )
+
+        if start_date is not None:
+
+            query = query.filter(
+                self.model.transaction_date
+                >= start_date
+            )
+
+        if end_date is not None:
+
+            query = query.filter(
+                self.model.transaction_date
+                <= end_date
+            )
+
+        if search_text:
+
+            query = query.filter(
+                self.model.description.ilike(
+                    f"%{search_text}%"
+                )
+            )
+
+        return (
+            query
+            .order_by(
+                self.model.transaction_date.desc()
+            )
+            .all()
+        )
