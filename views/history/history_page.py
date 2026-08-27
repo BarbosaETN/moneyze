@@ -190,6 +190,8 @@ class HistoryPage(BasePage):
                     "amount": transaction.amount,
                     "category_name": (
                         transaction.category.name
+                        if transaction.category is not None
+                        else "Sem categoria"
                     ),
                     "transaction_date": (
                         transaction.transaction_date.strftime(

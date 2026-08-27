@@ -12,6 +12,10 @@ from styles.month_selector import (
     MONTH_SELECTOR_STYLE,
 )
 
+from styles.Income import INCOME_STYLE
+
+from styles.summary_card import SUMMARY_CARD_STYLE
+
 
 THEME = f"""
 
@@ -26,6 +30,10 @@ THEME = f"""
 {CATEGORY_CARD_STYLE}
 
 {MONTH_SELECTOR_STYLE}
+
+{INCOME_STYLE}
+
+{SUMMARY_CARD_STYLE}
 
 """
 

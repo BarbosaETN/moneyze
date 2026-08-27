@@ -1,5 +1,6 @@
+from PySide6.QtCore import QDate
+
 from PySide6.QtWidgets import (
-    QComboBox,
     QDateEdit,
     QDoubleSpinBox,
     QHBoxLayout,
@@ -15,10 +16,10 @@ from components.dialogs.base_dialog import BaseDialog
 
 class IncomeDialog(BaseDialog):
 
-    def __init__(self, categories=None):
-        super().__init__("Nova Receita")
-
-        self.categories = categories or []
+    def __init__(self):
+        super().__init__(
+            "Nova Receita"
+        )
 
         self._setup_ui()
         self._connect_signals()
@@ -30,51 +31,62 @@ class IncomeDialog(BaseDialog):
 
     def _create_form(self):
 
-        title_label = QLabel("Título")
+        title_label = QLabel(
+            "Título"
+        )
 
         self.title_input = QLineEdit()
+
         self.title_input.setPlaceholderText(
             "Ex.: Salário"
         )
 
-        amount_label = QLabel("Valor")
+
+        amount_label = QLabel(
+            "Valor"
+        )
 
         self.amount_input = QDoubleSpinBox()
+
         self.amount_input.setRange(
             0.01,
             999999999.99,
         )
-        self.amount_input.setDecimals(2)
-        self.amount_input.setPrefix("R$ ")
 
-        category_label = QLabel("Categoria")
+        self.amount_input.setDecimals(
+            2
+        )
 
-        self.category_input = QComboBox()
+        self.amount_input.setPrefix(
+            "R$ "
+        )
 
-        for category in self.categories:
 
-            self.category_input.addItem(
-                category["name"],
-                category["id"],
-            )
-
-        date_label = QLabel("Data")
+        date_label = QLabel(
+            "Data"
+        )
 
         self.date_input = QDateEdit()
 
-        self.date_input.setCalendarPopup(True)
-
-        self.date_input.setDate(
-            self.date_input.date()
+        self.date_input.setCalendarPopup(
+            True
         )
 
-        description_label = QLabel("Descrição")
+        self.date_input.setDate(
+            QDate.currentDate()
+        )
+
+
+        description_label = QLabel(
+            "Descrição"
+        )
 
         self.description_input = QTextEdit()
 
         self.description_input.setPlaceholderText(
             "Descrição opcional"
         )
+
 
         self.main_layout.addWidget(
             title_label
@@ -84,6 +96,7 @@ class IncomeDialog(BaseDialog):
             self.title_input
         )
 
+
         self.main_layout.addWidget(
             amount_label
         )
@@ -92,13 +105,6 @@ class IncomeDialog(BaseDialog):
             self.amount_input
         )
 
-        self.main_layout.addWidget(
-            category_label
-        )
-
-        self.main_layout.addWidget(
-            self.category_input
-        )
 
         self.main_layout.addWidget(
             date_label
@@ -107,6 +113,7 @@ class IncomeDialog(BaseDialog):
         self.main_layout.addWidget(
             self.date_input
         )
+
 
         self.main_layout.addWidget(
             description_label
@@ -153,14 +160,21 @@ class IncomeDialog(BaseDialog):
     def get_data(self):
 
         return {
-            "title": self.title_input.text().strip(),
+            "title": (
+                self.title_input
+                .text()
+                .strip()
+            ),
 
-            "amount": self.amount_input.value(),
-
-            "category_id": self.category_input.currentData(),
+            "amount": (
+                self.amount_input
+                .value()
+            ),
 
             "transaction_date": (
-                self.date_input.date().toPython()
+                self.date_input
+                .date()
+                .toPython()
             ),
 
             "description": (

@@ -1,8 +1,8 @@
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
-    QGridLayout,
-    QWidget,
     QScrollArea,
+    QVBoxLayout,
+    QWidget,
 )
 
 from components.cards.income_card import IncomeCard
@@ -15,33 +15,40 @@ class IncomeGrid(QScrollArea):
     def __init__(self):
         super().__init__()
 
+        self.setObjectName(
+            "incomeGrid"
+        )
+
+        self.setWidgetResizable(True)
+
         self.container = QWidget()
-        self.grid_layout = QGridLayout(
+
+        self.container.setObjectName(
+            "incomeGridContainer"
+        )
+
+        self.layout = QVBoxLayout(
             self.container
         )
+
+        self.layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
+        self.layout.setSpacing(0)
 
         self.setWidget(
             self.container
         )
 
-        self.setWidgetResizable(True)
-
-        self._setup_ui()
-
-    def _setup_ui(self):
-
-        self.grid_layout.setSpacing(20)
-
     def set_incomes(self, incomes):
 
         self._clear_grid()
 
-        columns = 3
-
-        for index, income in enumerate(incomes):
-
-            row = index // columns
-            column = index % columns
+        for income in incomes:
 
             card = IncomeCard(
                 transaction_id=income["id"],
@@ -59,11 +66,11 @@ class IncomeGrid(QScrollArea):
                 self._on_delete_requested
             )
 
-            self.grid_layout.addWidget(
-                card,
-                row,
-                column,
+            self.layout.addWidget(
+                card
             )
+
+        self.layout.addStretch()
 
     def _on_delete_requested(
         self,
@@ -76,11 +83,14 @@ class IncomeGrid(QScrollArea):
 
     def _clear_grid(self):
 
-        while self.grid_layout.count():
+        while self.layout.count():
 
-            item = self.grid_layout.takeAt(0)
+            item = self.layout.takeAt(
+                0
+            )
 
             widget = item.widget()
 
             if widget is not None:
+
                 widget.deleteLater()
