@@ -1,12 +1,13 @@
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
+    QHBoxLayout,
     QLabel,
     QProgressBar,
     QPushButton,
-    QHBoxLayout
 )
 
 from components.cards.base_card import BaseCard
+from utils.formatters import format_currency
 
 
 class CategoryCard(BaseCard):
@@ -19,6 +20,8 @@ class CategoryCard(BaseCard):
         name: str,
         budget: float,
         spent: float,
+        remaining: float,
+        percentage: float,
     ):
         super().__init__()
 
@@ -26,14 +29,8 @@ class CategoryCard(BaseCard):
         self.name = name
         self.budget = budget
         self.spent = spent
-
-        self.remaining = budget - spent
-
-        self.percentage = (
-            (self.spent / self.budget) * 100
-            if self.budget > 0
-            else 0
-        )
+        self.remaining = remaining
+        self.percentage = percentage
 
         self._setup_ui()
 
@@ -43,19 +40,30 @@ class CategoryCard(BaseCard):
 
         self._create_section(
             "Orçamento",
-            f"R$ {self.budget:.2f}",
+            format_currency(self.budget),
         )
 
         self._create_section(
             "Gasto",
-            f"R$ {self.spent:.2f}",
+            format_currency(self.spent),
         )
+
+        self._create_budget_warning()
 
         self._create_progress()
 
+        self._create_percentage_label()
+
+        remaining_object_name = (
+            "categoryExceededValue"
+            if self._is_budget_exceeded()
+            else "categorySectionValue"
+        )
+
         self._create_section(
             "Restante",
-            f"R$ {self.remaining:.2f}",
+            format_currency(self.remaining),
+            remaining_object_name,
         )
 
     def _create_header(self):
@@ -63,47 +71,134 @@ class CategoryCard(BaseCard):
         header_layout = QHBoxLayout()
 
         title = QLabel(self.name)
-        title.setObjectName("categoryTitle")
 
-        self.delete_button = QPushButton("🗑")
-        self.delete_button.setObjectName("deleteButton")
+        title.setObjectName(
+            "categoryTitle"
+        )
+
+        self.delete_button = QPushButton(
+            "🗑"
+        )
+
+        self.delete_button.setObjectName(
+            "deleteButton"
+        )
 
         self.delete_button.clicked.connect(
             self._request_delete
         )
 
         header_layout.addWidget(title)
-        header_layout.addStretch()
-        header_layout.addWidget(self.delete_button)
 
-        self.layout.addLayout(header_layout)
+        header_layout.addStretch()
+
+        header_layout.addWidget(
+            self.delete_button
+        )
+
+        self.layout.addLayout(
+            header_layout
+        )
 
     def _create_section(
         self,
         title: str,
         value: str,
+        value_object_name="categorySectionValue",
     ):
 
         title_label = QLabel(title)
-        title_label.setObjectName("categorySectionTitle")
+
+        title_label.setObjectName(
+            "categorySectionTitle"
+        )
 
         value_label = QLabel(value)
-        value_label.setObjectName("categorySectionValue")
 
-        self.layout.addWidget(title_label)
-        self.layout.addWidget(value_label)
+        value_label.setObjectName(
+            value_object_name
+        )
+
+        self.layout.addWidget(
+            title_label
+        )
+
+        self.layout.addWidget(
+            value_label
+        )
+
+    def _create_budget_warning(self):
+
+        if not self._is_budget_exceeded():
+            return
+
+        warning_label = QLabel(
+            "Orçamento ultrapassado"
+        )
+
+        warning_label.setObjectName(
+            "categoryBudgetWarning"
+        )
+
+        self.layout.addWidget(
+            warning_label
+        )
 
     def _create_progress(self):
 
         progress = QProgressBar()
 
-        progress.setObjectName("categoryProgress")
+        progress.setObjectName(
+            "categoryProgress"
+        )
 
-        progress.setRange(0, 100)
+        progress.setRange(
+            0,
+            100,
+        )
 
-        progress.setValue(int(self.percentage))
+        progress_value = min(
+            int(self.percentage),
+            100,
+        )
 
-        self.layout.addWidget(progress)
+        progress.setValue(
+            progress_value
+        )
+
+        self.layout.addWidget(
+            progress
+        )
+
+    def _create_percentage_label(self):
+
+        percentage_label = QLabel(
+            f"{self.percentage:.1f}% utilizado"
+        )
+
+        object_name = (
+            "categoryExceededPercentage"
+            if self._is_budget_exceeded()
+            else "categoryPercentage"
+        )
+
+        percentage_label.setObjectName(
+            object_name
+        )
+
+        self.layout.addWidget(
+            percentage_label
+        )
+
+    def _is_budget_exceeded(self):
+
+        return (
+            self.budget > 0
+            and self.spent > self.budget
+        )
 
     def _request_delete(self):
-        self.delete_requested.emit(self.category_id)
+
+        self.delete_requested.emit(
+            self.category_id
+        )

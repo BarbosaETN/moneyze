@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import or_, select
+from sqlalchemy import func, select
 
 from database.models.transaction import Transaction
 from enums.transaction_type import TransactionType
@@ -132,4 +132,31 @@ class TransactionRepository(BaseRepository):
                 self.model.transaction_date.desc()
             )
             .all()
+        )
+
+    def get_expense_total_by_category(
+        self,
+        category_id: int,
+        start_date,
+        end_date,
+    ):
+
+        statement = (
+            select(
+                func.coalesce(
+                    func.sum(Transaction.amount),
+                    0,
+                )
+            )
+            .where(
+                Transaction.category_id == category_id,
+                Transaction.transaction_type
+                == TransactionType.EXPENSE,
+                Transaction.transaction_date >= start_date,
+                Transaction.transaction_date <= end_date,
+            )
+        )
+
+        return self.session.scalar(
+            statement
         )

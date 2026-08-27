@@ -1,9 +1,17 @@
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QLineEdit, QPushButton
+from PySide6.QtWidgets import (
+    QDoubleSpinBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+)
 
 from components.buttons.primary_button import PrimaryButton
 from components.dialogs.base_dialog import BaseDialog
 
+
 class CategoryDialog(BaseDialog):
+
     def __init__(self):
         super().__init__("Nova Categoria")
 
@@ -12,44 +20,95 @@ class CategoryDialog(BaseDialog):
 
     def _setup_ui(self):
         self._create_form()
-
         self._create_buttons()
 
     def _create_form(self):
 
         self.name_label = QLabel("Nome")
+
         self.name_input = QLineEdit()
 
         self.name_input.setPlaceholderText(
             "Digite o nome da categoria"
         )
 
-        self.main_layout.addWidget(self.name_label)
-        self.main_layout.addWidget(self.name_input)
+        self.budget_label = QLabel(
+            "Orçamento mensal"
+        )
+
+        self.budget_input = QDoubleSpinBox()
+
+        self.budget_input.setMinimum(0)
+
+        self.budget_input.setMaximum(
+            999999999
+        )
+
+        self.budget_input.setDecimals(2)
+
+        self.budget_input.setPrefix(
+            "R$ "
+        )
+
+        self.budget_input.setValue(0)
+
+        self.main_layout.addWidget(
+            self.name_label
+        )
+
+        self.main_layout.addWidget(
+            self.name_input
+        )
+
+        self.main_layout.addWidget(
+            self.budget_label
+        )
+
+        self.main_layout.addWidget(
+            self.budget_input
+        )
 
     def _create_buttons(self):
 
         buttons_layout = QHBoxLayout()
 
-        self.cancel_button = QPushButton("Cancelar")
+        self.cancel_button = QPushButton(
+            "Cancelar"
+        )
 
-        self.save_button = PrimaryButton("Salvar")
+        self.save_button = PrimaryButton(
+            "Salvar"
+        )
 
-        buttons_layout.addWidget(self.cancel_button)
+        buttons_layout.addWidget(
+            self.cancel_button
+        )
 
-        buttons_layout.addWidget(self.save_button)
+        buttons_layout.addWidget(
+            self.save_button
+        )
 
-        self.main_layout.addLayout(buttons_layout)
+        self.main_layout.addLayout(
+            buttons_layout
+        )
 
     def _connect_signals(self):
 
-        self.cancel_button.clicked.connect(self.reject)
+        self.cancel_button.clicked.connect(
+            self.reject
+        )
 
-        self.save_button.clicked.connect(self.accept)
+        self.save_button.clicked.connect(
+            self.accept
+        )
 
     def get_data(self):
 
         return {
-            "name": self.name_input.text().strip()
+            "name": (
+                self.name_input.text().strip()
+            ),
+            "budget": (
+                self.budget_input.value()
+            ),
         }
-
