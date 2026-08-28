@@ -130,6 +130,10 @@ class CategoryPage(BasePage):
             self.open_create_dialog
         )
 
+        self.category_grid.create_requested.connect(
+            self.open_create_dialog
+        )
+
         self.category_grid.delete_requested.connect(
             self._delete_category
         )

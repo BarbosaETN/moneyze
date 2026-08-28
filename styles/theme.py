@@ -20,6 +20,8 @@ from styles.transaction import TRANSACTION_STYLE
 
 from styles.summary_card import SUMMARY_CARD_STYLE
 
+from styles.empty_state import EMPTY_STATE_STYLE
+
 
 THEME = f"""
 
@@ -43,7 +45,13 @@ THEME = f"""
 
 {SUMMARY_CARD_STYLE}
 
+{EMPTY_STATE_STYLE}
+
 """
 
+
 def apply_theme(app):
-    app.setStyleSheet(THEME)
+
+    app.setStyleSheet(
+        THEME
+    )

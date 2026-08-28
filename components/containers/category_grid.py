@@ -1,30 +1,44 @@
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import (
+    Qt,
+    Signal,
+)
 
 from PySide6.QtWidgets import (
     QGridLayout,
-    QLabel,
     QScrollArea,
     QVBoxLayout,
     QWidget,
 )
 
-from components.cards.category_card import CategoryCard
+from components.cards.category_card import (
+    CategoryCard,
+)
+
+from components.empty_state import (
+    EmptyState,
+)
 
 
 class CategoryGrid(QScrollArea):
 
     delete_requested = Signal(int)
 
+    create_requested = Signal()
+
     def __init__(self):
         super().__init__()
 
-        self.setObjectName("categoryGrid")
+        self.setObjectName(
+            "categoryGrid"
+        )
 
         self._setup_ui()
 
     def _setup_ui(self):
 
-        self.setWidgetResizable(True)
+        self.setWidgetResizable(
+            True
+        )
 
         self.container = QWidget()
 
@@ -43,7 +57,9 @@ class CategoryGrid(QScrollArea):
             0,
         )
 
-        self.main_layout.setSpacing(0)
+        self.main_layout.setSpacing(
+            0
+        )
 
         self._create_grid()
 
@@ -61,7 +77,9 @@ class CategoryGrid(QScrollArea):
             self.grid_widget
         )
 
-        self.grid_layout.setSpacing(20)
+        self.grid_layout.setSpacing(
+            20
+        )
 
         self.grid_layout.setContentsMargins(
             0,
@@ -70,64 +88,40 @@ class CategoryGrid(QScrollArea):
             0,
         )
 
+        self.grid_layout.setAlignment(
+            Qt.AlignmentFlag.AlignTop
+        )
+
         self.main_layout.addWidget(
             self.grid_widget
         )
 
     def _create_empty_state(self):
 
-        self.empty_widget = QWidget()
-
-        empty_layout = QVBoxLayout(
-            self.empty_widget
+        self.empty_state = EmptyState(
+            title=(
+                "Nenhuma categoria cadastrada"
+            ),
+            description=(
+                "Crie sua primeira categoria para "
+                "organizar suas receitas e despesas."
+            ),
+            icon_name="fa5s.folder-open",
+            icon_color="#64748B",
+            button_text="Nova Categoria",
+            button_icon="fa5s.plus",
         )
 
-        empty_layout.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
+        self.empty_state.action_requested.connect(
+            self.create_requested.emit
         )
-
-        title = QLabel(
-            "Nenhuma categoria cadastrada"
-        )
-
-        title.setObjectName(
-            "categoryEmptyTitle"
-        )
-
-        title.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )
-
-        description = QLabel(
-            "Crie categorias para organizar\n"
-            "suas receitas e despesas."
-        )
-
-        description.setObjectName(
-            "categoryEmptyDescription"
-        )
-
-        description.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )
-
-        empty_layout.addStretch()
-
-        empty_layout.addWidget(
-            title
-        )
-
-        empty_layout.addWidget(
-            description
-        )
-
-        empty_layout.addStretch()
 
         self.main_layout.addWidget(
-            self.empty_widget
+            self.empty_state,
+            1,
         )
 
-        self.empty_widget.hide()
+        self.empty_state.hide()
 
     def set_categories(
         self,
@@ -140,11 +134,11 @@ class CategoryGrid(QScrollArea):
 
             self.grid_widget.hide()
 
-            self.empty_widget.show()
+            self.empty_state.show()
 
             return
 
-        self.empty_widget.hide()
+        self.empty_state.hide()
 
         self.grid_widget.show()
 
