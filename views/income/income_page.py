@@ -1,23 +1,44 @@
+from calendar import monthrange
+from datetime import date
+
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
 )
 
-from components.buttons.primary_button import PrimaryButton
-from components.containers.income_grid import IncomeGrid
-from components.dialogs.income_dialog import IncomeDialog
+from PySide6.QtCore import Qt
 
-from database.connection import get_session
-
-from enums.transaction_type import TransactionType
-
-from components.containers.income_header import (
-    IncomeHeader,
+from components.navigation.month_selector import (
+    MonthSelector,
 )
 
-from exceptions.moneyze_error import MoneyzeError
+from components.cards.summary_card import (
+    SummaryCard,
+)
 
-from components.cards.summary_card import SummaryCard
+from components.containers.income_grid import (
+    IncomeGrid,
+)
+
+from components.containers.transaction_header import (
+    TransactionHeader,
+)
+
+from components.dialogs.income_dialog import (
+    IncomeDialog,
+)
+
+from database.connection import (
+    get_session,
+)
+
+from enums.transaction_type import (
+    TransactionType,
+)
+
+from exceptions.moneyze_error import (
+    MoneyzeError,
+)
 
 from repositories.transaction_repository import (
     TransactionRepository,
@@ -41,15 +62,15 @@ class IncomePage(BasePage):
 
         self._create_services()
 
+        today = date.today()
+
+        self.selected_year = today.year
+        self.selected_month = today.month
+
         self._setup_page()
         self._connect_signals()
 
         self.load_incomes()
-
-    def _setup_page(self):
-
-        self._create_summary()
-        self._create_grid()
 
     def _create_services(self):
 
@@ -67,27 +88,24 @@ class IncomePage(BasePage):
             )
         )
 
-    def _create_toolbar(self):
+    def _setup_page(self):
 
-        self.toolbar_layout = (
-            QHBoxLayout()
+        self._create_month_selector()
+
+        self._create_summary()
+
+        self._create_grid()
+
+    def _create_month_selector(self):
+
+        self.month_selector = MonthSelector()
+
+        self.content_layout.addWidget(
+            self.month_selector,
+            alignment=Qt.AlignmentFlag.AlignCenter,
         )
 
-        self.toolbar_layout.addStretch()
-
-        self.new_income_button = (
-            PrimaryButton(
-                "Nova Receita"
-            )
-        )
-
-        self.toolbar_layout.addWidget(
-            self.new_income_button
-        )
-
-        self.content_layout.addLayout(
-            self.toolbar_layout
-        )
+        self._update_month_label()  
 
     def _create_summary(self):
 
@@ -103,16 +121,16 @@ class IncomePage(BasePage):
 
         self.content_layout.addWidget(
             self.income_summary
-        )    
+        )
 
     def _create_grid(self):
 
-        self.income_header = IncomeHeader()
+        self.transaction_header = TransactionHeader()
 
         self.income_grid = IncomeGrid()
 
         self.content_layout.addWidget(
-            self.income_header
+            self.transaction_header
         )
 
         self.content_layout.addWidget(
@@ -120,6 +138,14 @@ class IncomePage(BasePage):
         )
 
     def _connect_signals(self):
+
+        self.month_selector.previous_requested.connect(
+            self._go_to_previous_month
+        )
+
+        self.month_selector.next_requested.connect(
+            self._go_to_next_month
+        )
 
         self.income_summary.action_requested.connect(
             self._open_income_dialog
@@ -129,11 +155,96 @@ class IncomePage(BasePage):
             self._delete_income
         )
 
+    def _go_to_previous_month(self):
+
+        self.selected_month -= 1
+
+        if self.selected_month == 0:
+
+            self.selected_month = 12
+
+            self.selected_year -= 1
+
+        self._update_month_label()
+
+        self.load_incomes()
+
+    def _go_to_next_month(self):
+
+        self.selected_month += 1
+
+        if self.selected_month == 13:
+
+            self.selected_month = 1
+
+            self.selected_year += 1
+
+        self._update_month_label()
+
+        self.load_incomes()
+
+    def _update_month_label(self):
+
+        months = [
+            "Janeiro",
+            "Fevereiro",
+            "Março",
+            "Abril",
+            "Maio",
+            "Junho",
+            "Julho",
+            "Agosto",
+            "Setembro",
+            "Outubro",
+            "Novembro",
+            "Dezembro",
+        ]
+
+        month_name = months[
+            self.selected_month - 1
+        ]
+
+        self.month_selector.set_month_text(
+            f"{month_name} {self.selected_year}"
+        )
+
+    def _get_selected_month_range(self):
+
+        start_date = date(
+            self.selected_year,
+            self.selected_month,
+            1,
+        )
+
+        last_day = monthrange(
+            self.selected_year,
+            self.selected_month,
+        )[1]
+
+        end_date = date(
+            self.selected_year,
+            self.selected_month,
+            last_day,
+        )
+
+        return (
+            start_date,
+            end_date,
+        )
+
     def load_incomes(self):
+
+        (
+            start_date,
+            end_date,
+        ) = self._get_selected_month_range()
 
         incomes = (
             self.transaction_service
-            .get_incomes()
+            .get_incomes(
+                start_date=start_date,
+                end_date=end_date,
+            )
         )
 
         total_income = sum(
@@ -151,16 +262,18 @@ class IncomePage(BasePage):
 
             income_data.append({
                 "id": income.id,
+
                 "title": income.title,
+
                 "amount": income.amount,
+
                 "transaction_date": (
                     income.transaction_date
                     .strftime("%d/%m/%Y")
                 ),
+
                 "category_name": (
-                    income.category.name
-                    if income.category
-                    else "Receita"
+                    "Receita"
                 ),
             })
 
@@ -193,7 +306,10 @@ class IncomePage(BasePage):
             QMessageBox.information(
                 self,
                 "Receita criada",
-                "A receita foi criada com sucesso.",
+                (
+                    "A receita foi criada "
+                    "com sucesso."
+                ),
             )
 
         except MoneyzeError as error:
@@ -223,7 +339,10 @@ class IncomePage(BasePage):
         reply = QMessageBox.question(
             self,
             "Excluir receita",
-            "Deseja realmente excluir esta receita?",
+            (
+                "Deseja realmente excluir "
+                "esta receita?"
+            ),
             QMessageBox.Yes
             | QMessageBox.No,
             QMessageBox.No,
@@ -254,8 +373,8 @@ class IncomePage(BasePage):
 
             QMessageBox.warning(
                 self,
-                error.title,
-                error.message,
+                "Não foi possível criar a receita.",
+                str(error),
             )
 
         except Exception:
@@ -269,7 +388,10 @@ class IncomePage(BasePage):
                 ),
             )
 
-    def closeEvent(self, event):
+    def closeEvent(
+        self,
+        event,
+    ):
 
         self.session.close()
 

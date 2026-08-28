@@ -23,6 +23,7 @@ class SummaryCard(BaseCard):
         icon_name: str,
         icon_color: str,
         icon_background: str,
+        amount_color: str = "#34D399",
         button_text: str | None = None,
         button_icon: str | None = None,
     ):
@@ -33,6 +34,7 @@ class SummaryCard(BaseCard):
         self.icon_name = icon_name
         self.icon_color = icon_color
         self.icon_background = icon_background
+        self.amount_color = amount_color
         self.button_text = button_text
         self.button_icon = button_icon
 
@@ -81,6 +83,12 @@ class SummaryCard(BaseCard):
 
         self.amount_label.setObjectName(
             "summaryAmount"
+        )
+
+        self.amount_label.setStyleSheet(
+            f"""
+            color: {self.amount_color}
+            """
         )
 
         content_layout.addWidget(

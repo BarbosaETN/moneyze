@@ -1,3 +1,7 @@
+from PySide6.QtCore import (
+    QDate,
+)
+
 from PySide6.QtWidgets import (
     QComboBox,
     QDateEdit,
@@ -9,16 +13,29 @@ from PySide6.QtWidgets import (
     QTextEdit,
 )
 
-from components.buttons.primary_button import PrimaryButton
-from components.dialogs.base_dialog import BaseDialog
+from components.buttons.primary_button import (
+    PrimaryButton,
+)
+
+from components.dialogs.base_dialog import (
+    BaseDialog,
+)
 
 
 class ExpenseDialog(BaseDialog):
 
-    def __init__(self, categories=None):
-        super().__init__("Nova Despesa")
+    def __init__(
+        self,
+        categories=None,
+    ):
 
-        self.categories = categories or []
+        super().__init__(
+            "Nova Despesa"
+        )
+
+        self.categories = (
+            categories or []
+        )
 
         self._setup_ui()
         self._connect_signals()
@@ -30,46 +47,22 @@ class ExpenseDialog(BaseDialog):
 
     def _create_form(self):
 
-        title_label = QLabel("Título")
+        self._create_title_input()
+        self._create_amount_input()
+        self._create_category_input()
+        self._create_date_input()
+        self._create_description_input()
+
+    def _create_title_input(self):
+
+        title_label = QLabel(
+            "Título"
+        )
 
         self.title_input = QLineEdit()
+
         self.title_input.setPlaceholderText(
             "Ex.: Mercado"
-        )
-
-        amount_label = QLabel("Valor")
-
-        self.amount_input = QDoubleSpinBox()
-        self.amount_input.setRange(
-            0.01,
-            999999999.99,
-        )
-        self.amount_input.setDecimals(2)
-        self.amount_input.setPrefix("R$ ")
-
-        category_label = QLabel("Categoria")
-
-        self.category_input = QComboBox()
-
-        for category in self.categories:
-
-            self.category_input.addItem(
-                category["name"],
-                category["id"],
-            )
-
-        date_label = QLabel("Data")
-
-        self.date_input = QDateEdit()
-
-        self.date_input.setCalendarPopup(True)
-
-        description_label = QLabel("Descrição")
-
-        self.description_input = QTextEdit()
-
-        self.description_input.setPlaceholderText(
-            "Descrição opcional"
         )
 
         self.main_layout.addWidget(
@@ -80,6 +73,29 @@ class ExpenseDialog(BaseDialog):
             self.title_input
         )
 
+    def _create_amount_input(self):
+
+        amount_label = QLabel(
+            "Valor"
+        )
+
+        self.amount_input = (
+            QDoubleSpinBox()
+        )
+
+        self.amount_input.setRange(
+            0.01,
+            999999999.99,
+        )
+
+        self.amount_input.setDecimals(
+            2
+        )
+
+        self.amount_input.setPrefix(
+            "R$ "
+        )
+
         self.main_layout.addWidget(
             amount_label
         )
@@ -87,6 +103,23 @@ class ExpenseDialog(BaseDialog):
         self.main_layout.addWidget(
             self.amount_input
         )
+
+    def _create_category_input(self):
+
+        category_label = QLabel(
+            "Categoria"
+        )
+
+        self.category_input = (
+            QComboBox()
+        )
+
+        for category in self.categories:
+
+            self.category_input.addItem(
+                category["name"],
+                category["id"],
+            )
 
         self.main_layout.addWidget(
             category_label
@@ -96,12 +129,42 @@ class ExpenseDialog(BaseDialog):
             self.category_input
         )
 
+    def _create_date_input(self):
+
+        date_label = QLabel(
+            "Data"
+        )
+
+        self.date_input = QDateEdit()
+
+        self.date_input.setCalendarPopup(
+            True
+        )
+
+        self.date_input.setDate(
+            QDate.currentDate()
+        )
+
         self.main_layout.addWidget(
             date_label
         )
 
         self.main_layout.addWidget(
             self.date_input
+        )
+
+    def _create_description_input(self):
+
+        description_label = QLabel(
+            "Descrição"
+        )
+
+        self.description_input = (
+            QTextEdit()
+        )
+
+        self.description_input.setPlaceholderText(
+            "Descrição opcional"
         )
 
         self.main_layout.addWidget(
@@ -149,16 +212,26 @@ class ExpenseDialog(BaseDialog):
     def get_data(self):
 
         return {
-            "title": self.title_input.text().strip(),
+            "title": (
+                self.title_input
+                .text()
+                .strip()
+            ),
 
-            "amount": self.amount_input.value(),
+            "amount": (
+                self.amount_input
+                .value()
+            ),
 
             "category_id": (
-                self.category_input.currentData()
+                self.category_input
+                .currentData()
             ),
 
             "transaction_date": (
-                self.date_input.date().toPython()
+                self.date_input
+                .date()
+                .toPython()
             ),
 
             "description": (

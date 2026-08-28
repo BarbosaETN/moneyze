@@ -2,8 +2,13 @@ from datetime import date
 
 from enums.transaction_type import TransactionType
 
-from exceptions.not_found_error import NotFoundError
-from exceptions.validation_error import ValidationError
+from exceptions.not_found_error import (
+    NotFoundError,
+)
+
+from exceptions.validation_error import (
+    ValidationError,
+)
 
 from services.base_service import BaseService
 
@@ -11,24 +16,79 @@ from services.base_service import BaseService
 class TransactionService(BaseService):
 
     def __init__(self, repository):
-        super().__init__(repository)
+        super().__init__(
+            repository
+        )
 
     def create(self, **data):
 
         self._validate(data)
 
-        return super().create(**data)
+        return super().create(
+            **data
+        )
 
-    def get_incomes(self):
+    def get_incomes(
+        self,
+        start_date=None,
+        end_date=None,
+    ):
+
+        if (
+            start_date is not None
+            and end_date is not None
+        ):
+
+            return (
+                self.repository
+                .get_by_type_and_date_range(
+                    TransactionType.INCOME,
+                    start_date,
+                    end_date,
+                )
+            )
 
         return self.repository.get_by_type(
             TransactionType.INCOME
         )
 
-    def get_expenses(self):
+    def get_expenses(
+        self,
+        start_date=None,
+        end_date=None,
+    ):
+
+        if (
+            start_date is not None
+            and end_date is not None
+        ):
+
+            return (
+                self.repository
+                .get_by_type_and_date_range(
+                    TransactionType.EXPENSE,
+                    start_date,
+                    end_date,
+                )
+            )
 
         return self.repository.get_by_type(
             TransactionType.EXPENSE
+        )
+
+    def get_expenses_by_date_range(
+        self,
+        start_date,
+        end_date,
+    ):
+
+        return (
+            self.repository
+            .get_by_type_and_date_range(
+                TransactionType.EXPENSE,
+                start_date,
+                end_date,
+            )
         )
 
     def delete_by_id(
@@ -75,7 +135,10 @@ class TransactionService(BaseService):
         if amount <= 0:
 
             raise ValidationError(
-                "O valor da transação deve ser maior que zero."
+                (
+                    "O valor da transação deve "
+                    "ser maior que zero."
+                )
             )
 
         transaction_type = data.get(
@@ -109,11 +172,13 @@ class TransactionService(BaseService):
         )
 
         if (
-            transaction_type
-            == TransactionType.EXPENSE
+            transaction_type == TransactionType.EXPENSE
             and category_id is None
         ):
 
             raise ValidationError(
-                "A categoria da despesa é obrigatória."
+                (
+                    "A categoria da despesa "
+                    "é obrigatória."
+                )
             )

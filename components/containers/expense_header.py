@@ -5,13 +5,13 @@ from PySide6.QtWidgets import (
 )
 
 
-class IncomeHeader(QWidget):
+class ExpenseHeader(QWidget):
 
     def __init__(self):
         super().__init__()
 
         self.setObjectName(
-            "incomeHeader"
+            "expenseHeader"
         )
 
         self._setup_ui()
@@ -23,10 +23,14 @@ class IncomeHeader(QWidget):
         )
 
         layout.setContentsMargins(
-            60,
+            20,
             0,
-            50,
+            20,
             0,
+        )
+
+        layout.setSpacing(
+            0
         )
 
         description_label = QLabel(
@@ -34,7 +38,7 @@ class IncomeHeader(QWidget):
         )
 
         description_label.setObjectName(
-            "incomeHeaderLabel"
+            "transactionHeaderLabel"
         )
 
         category_label = QLabel(
@@ -42,28 +46,28 @@ class IncomeHeader(QWidget):
         )
 
         category_label.setObjectName(
-            "incomeHeaderLabel"
+            "transactionHeaderLabel"
         )
 
-        value_label = QLabel(
+        amount_label = QLabel(
             "VALOR"
         )
 
-        value_label.setObjectName(
-            "incomeHeaderLabel"
+        amount_label.setObjectName(
+            "transactionHeaderLabel"
         )
 
         layout.addWidget(
             description_label,
-            5,
+            4,
         )
 
         layout.addWidget(
             category_label,
-            3,
+            2,
         )
 
         layout.addWidget(
-            value_label,
+            amount_label,
             2,
         )

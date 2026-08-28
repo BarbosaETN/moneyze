@@ -1,7 +1,12 @@
-from PySide6.QtCore import Signal
+from PySide6.QtCore import (
+    Qt,
+    Signal,
+)
+
 from PySide6.QtWidgets import (
+    QFrame,
+    QGridLayout,
     QScrollArea,
-    QVBoxLayout,
     QWidget,
 )
 
@@ -15,40 +20,74 @@ class IncomeGrid(QScrollArea):
     def __init__(self):
         super().__init__()
 
-        self.setObjectName(
-            "incomeGrid"
-        )
-
-        self.setWidgetResizable(True)
-
         self.container = QWidget()
 
-        self.container.setObjectName(
-            "incomeGridContainer"
-        )
-
-        self.layout = QVBoxLayout(
+        self.grid_layout = QGridLayout(
             self.container
         )
-
-        self.layout.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
-
-        self.layout.setSpacing(0)
 
         self.setWidget(
             self.container
         )
 
-    def set_incomes(self, incomes):
+        self.setWidgetResizable(
+            True
+        )
+
+        self._setup_ui()
+
+    def _setup_ui(self):
+
+        self.setObjectName(
+            "incomeGrid"
+        )
+
+        self.container.setObjectName(
+            "incomeGridContainer"
+        )
+
+        self.setFrameShape(
+            QFrame.Shape.NoFrame
+        )
+
+        self.setLineWidth(
+            0
+        )
+
+        self.setMidLineWidth(
+            0
+        )
+
+        self.grid_layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
+        self.grid_layout.setSpacing(
+            0
+        )
+
+        self.grid_layout.setAlignment(
+            Qt.AlignmentFlag.AlignTop
+        )
+
+    def set_incomes(
+        self,
+        incomes,
+    ):
 
         self._clear_grid()
 
-        for income in incomes:
+        columns = 1
+
+        for index, income in enumerate(
+            incomes
+        ):
+
+            row = index // columns
+            column = index % columns
 
             card = IncomeCard(
                 transaction_id=income["id"],
@@ -66,11 +105,12 @@ class IncomeGrid(QScrollArea):
                 self._on_delete_requested
             )
 
-            self.layout.addWidget(
-                card
+            self.grid_layout.addWidget(
+                card,
+                row,
+                column,
+                alignment=Qt.AlignmentFlag.AlignTop,
             )
-
-        self.layout.addStretch()
 
     def _on_delete_requested(
         self,
@@ -83,9 +123,9 @@ class IncomeGrid(QScrollArea):
 
     def _clear_grid(self):
 
-        while self.layout.count():
+        while self.grid_layout.count():
 
-            item = self.layout.takeAt(
+            item = self.grid_layout.takeAt(
                 0
             )
 

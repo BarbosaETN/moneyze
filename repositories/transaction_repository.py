@@ -1,5 +1,3 @@
-from datetime import date
-
 from sqlalchemy import func, select
 
 from database.models.transaction import Transaction
@@ -10,14 +8,46 @@ from repositories.base_repository import BaseRepository
 class TransactionRepository(BaseRepository):
 
     def __init__(self, session):
-        super().__init__(session, Transaction)
+        super().__init__(
+            session,
+            Transaction,
+        )
 
-    def get_by_type(self, transaction_type):
+    def get_by_type(
+        self,
+        transaction_type,
+    ):
 
         return (
             self.session.query(self.model)
             .filter(
-                self.model.transaction_type == transaction_type
+                self.model.transaction_type
+                == transaction_type
+            )
+            .order_by(
+                self.model.transaction_date.desc()
+            )
+            .all()
+        )
+
+    def get_by_type_and_date_range(
+        self,
+        transaction_type,
+        start_date,
+        end_date,
+    ):
+
+        return (
+            self.session.query(self.model)
+            .filter(
+                self.model.transaction_type
+                == transaction_type,
+
+                self.model.transaction_date
+                >= start_date,
+
+                self.model.transaction_date
+                <= end_date,
             )
             .order_by(
                 self.model.transaction_date.desc()
@@ -37,7 +67,9 @@ class TransactionRepository(BaseRepository):
             )
         )
 
-        return self.session.scalars(statement).all()
+        return self.session.scalars(
+            statement
+        ).all()
 
     def get_by_date_range(
         self,
@@ -48,8 +80,11 @@ class TransactionRepository(BaseRepository):
         return (
             self.session.query(self.model)
             .filter(
-                self.model.transaction_date >= start_date,
-                self.model.transaction_date <= end_date,
+                self.model.transaction_date
+                >= start_date,
+
+                self.model.transaction_date
+                <= end_date,
             )
             .order_by(
                 self.model.transaction_date.desc()
@@ -70,8 +105,10 @@ class TransactionRepository(BaseRepository):
             statement
         ).all()
 
-
-    def search_by_description(self, text):
+    def search_by_description(
+        self,
+        text,
+    ):
 
         return (
             self.session.query(self.model)
@@ -93,6 +130,7 @@ class TransactionRepository(BaseRepository):
         end_date=None,
         search_text=None,
     ):
+
         query = self.session.query(
             self.model
         )
@@ -144,16 +182,24 @@ class TransactionRepository(BaseRepository):
         statement = (
             select(
                 func.coalesce(
-                    func.sum(Transaction.amount),
+                    func.sum(
+                        Transaction.amount
+                    ),
                     0,
                 )
             )
             .where(
-                Transaction.category_id == category_id,
+                Transaction.category_id
+                == category_id,
+
                 Transaction.transaction_type
                 == TransactionType.EXPENSE,
-                Transaction.transaction_date >= start_date,
-                Transaction.transaction_date <= end_date,
+
+                Transaction.transaction_date
+                >= start_date,
+
+                Transaction.transaction_date
+                <= end_date,
             )
         )
 

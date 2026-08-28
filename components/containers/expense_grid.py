@@ -1,5 +1,6 @@
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
+    QFrame,
     QGridLayout,
     QScrollArea,
     QWidget,
@@ -25,21 +26,61 @@ class ExpenseGrid(QScrollArea):
             self.container
         )
 
-        self.setWidgetResizable(True)
+        self.setWidgetResizable(
+            True
+        )
 
         self._setup_ui()
 
     def _setup_ui(self):
 
-        self.grid_layout.setSpacing(20)
+        self.setObjectName(
+            "expenseGrid"
+        )
 
-    def set_expenses(self, expenses):
+        self.container.setObjectName(
+            "expenseGridContainer"
+        )
+
+        self.setFrameShape(
+            QFrame.Shape.NoFrame
+        )
+
+        self.setLineWidth(
+            0
+        )
+
+        self.setMidLineWidth(
+            0
+        )
+
+        self.grid_layout.setContentsMargins(
+            0,
+            0,
+            0,
+            0,
+        )
+
+        self.grid_layout.setSpacing(
+            0
+        )
+
+        self.grid_layout.setAlignment(
+            Qt.AlignmentFlag.AlignTop
+        )
+
+    def set_expenses(
+        self,
+        expenses,
+    ):
 
         self._clear_grid()
 
-        columns = 3
+        columns = 1
 
-        for index, expense in enumerate(expenses):
+        for index, expense in enumerate(
+            expenses
+        ):
 
             row = index // columns
             column = index % columns
@@ -64,6 +105,7 @@ class ExpenseGrid(QScrollArea):
                 card,
                 row,
                 column,
+                alignment=Qt.AlignmentFlag.AlignTop,
             )
 
     def _on_delete_requested(
@@ -79,9 +121,12 @@ class ExpenseGrid(QScrollArea):
 
         while self.grid_layout.count():
 
-            item = self.grid_layout.takeAt(0)
+            item = self.grid_layout.takeAt(
+                0
+            )
 
             widget = item.widget()
 
             if widget is not None:
+
                 widget.deleteLater()

@@ -1,6 +1,10 @@
 import qtawesome as qta
 
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import (
+    Qt,
+    Signal,
+)
+
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
@@ -39,36 +43,71 @@ class IncomeCard(BaseCard):
 
     def _setup_ui(self):
 
+        self.layout.setContentsMargins(
+            28,
+            18,
+            28,
+            18,
+        )
+
+        self.layout.setSpacing(
+            20
+        )
+
         self._create_content()
 
     def _create_content(self):
 
-        content_layout = QHBoxLayout()
+        row_layout = QHBoxLayout()
 
-        content_layout.setContentsMargins(
-            20,
-            16,
-            20,
-            16,
+        row_layout.setSpacing(
+            20
         )
 
-        content_layout.setSpacing(
-            16
+        self._create_description(
+            row_layout
+        )
+
+        self._create_category(
+            row_layout
+        )
+
+        self._create_amount(
+            row_layout
+        )
+
+        self._create_delete_button(
+            row_layout
+        )
+
+        self.layout.addLayout(
+            row_layout
+        )
+
+    def _create_description(
+        self,
+        layout,
+    ):
+
+        description_layout = QHBoxLayout()
+
+        description_layout.setSpacing(
+            14
         )
 
         self._create_icon()
 
-        description_layout = QVBoxLayout()
+        text_layout = QVBoxLayout()
 
-        description_layout.setSpacing(
+        text_layout.setSpacing(
             4
         )
 
-        title = QLabel(
+        title_label = QLabel(
             self.title
         )
 
-        title.setObjectName(
+        title_label.setObjectName(
             "incomeTitle"
         )
 
@@ -80,62 +119,27 @@ class IncomeCard(BaseCard):
             "incomeDate"
         )
 
-        description_layout.addWidget(
-            title
+        text_layout.addWidget(
+            title_label
         )
 
-        description_layout.addWidget(
+        text_layout.addWidget(
             date_label
         )
 
-        category = QLabel(
-            self.category_name
-        )
-
-        category.setObjectName(
-            "incomeCategory"
-        )
-
-        amount = QLabel(
-            self._format_currency()
-        )
-
-        amount.setObjectName(
-            "incomeAmount"
-        )
-
-        amount.setAlignment(
-            Qt.AlignmentFlag.AlignRight
-            | Qt.AlignmentFlag.AlignVCenter
-        )
-
-        self._create_delete_button()
-
-        content_layout.addWidget(
+        description_layout.addWidget(
             self.icon_container
         )
 
-        content_layout.addLayout(
+        description_layout.addLayout(
+            text_layout
+        )
+
+        description_layout.addStretch()
+
+        layout.addLayout(
             description_layout,
             4,
-        )
-
-        content_layout.addWidget(
-            category,
-            2,
-        )
-
-        content_layout.addWidget(
-            amount,
-            2,
-        )
-
-        content_layout.addWidget(
-            self.delete_button
-        )
-
-        self.layout.addLayout(
-            content_layout
         )
 
     def _create_icon(self):
@@ -147,8 +151,8 @@ class IncomeCard(BaseCard):
         )
 
         self.icon_container.setFixedSize(
-            32,
-            32,
+            34,
+            34,
         )
 
         self.icon_container.setAlignment(
@@ -160,16 +164,61 @@ class IncomeCard(BaseCard):
             color="#34D399",
         )
 
-        pixmap = icon.pixmap(
-            16,
-            16,
-        )
-
         self.icon_container.setPixmap(
-            pixmap
+            icon.pixmap(
+                16,
+                16,
+            )
         )
 
-    def _create_delete_button(self):
+    def _create_category(
+        self,
+        layout,
+    ):
+
+        category_label = QLabel(
+            self.category_name
+        )
+
+        category_label.setObjectName(
+            "incomeCategory"
+        )
+
+        category_label.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+        )
+
+        layout.addWidget(
+            category_label,
+            2,
+        )
+
+    def _create_amount(
+        self,
+        layout,
+    ):
+
+        amount_label = QLabel(
+            self._format_currency()
+        )
+
+        amount_label.setObjectName(
+            "incomeAmount"
+        )
+
+        amount_label.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+        )
+
+        layout.addWidget(
+            amount_label,
+            2,
+        )
+
+    def _create_delete_button(
+        self,
+        layout,
+    ):
 
         self.delete_button = QPushButton()
 
@@ -178,19 +227,25 @@ class IncomeCard(BaseCard):
         )
 
         self.delete_button.setFixedSize(
-            32,
-            32,
+            36,
+            36,
+        )
+
+        icon = qta.icon(
+            "fa5s.trash",
+            color="#94A3B8",
         )
 
         self.delete_button.setIcon(
-            qta.icon(
-                "fa5s.trash",
-                color="#94A3B8",
-            )
+            icon
         )
 
         self.delete_button.clicked.connect(
             self._request_delete
+        )
+
+        layout.addWidget(
+            self.delete_button
         )
 
     def _format_currency(self):

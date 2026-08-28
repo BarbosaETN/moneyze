@@ -1,25 +1,25 @@
 from calendar import monthrange
 from datetime import date
-import qtawesome as qta
 
-from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QHBoxLayout,
-    QLabel,
     QMessageBox,
-    QPushButton,
     QWidget,
 )
 
 from components.buttons.primary_button import PrimaryButton
 from components.containers.category_grid import CategoryGrid
 from components.dialogs.category_dialog import CategoryDialog
+from components.navigation.month_selector import MonthSelector
 
 from database.connection import get_session
 
 from exceptions.moneyze_error import MoneyzeError
 
-from repositories.category_repository import CategoryRepository
+from repositories.category_repository import (
+    CategoryRepository,
+)
+
 from repositories.transaction_repository import (
     TransactionRepository,
 )
@@ -50,6 +50,7 @@ class CategoryPage(BasePage):
         self._setup_page()
         self._connect_signals()
 
+        self._update_month_label()
         self.load_categories()
 
     def _create_services(self):
@@ -75,118 +76,10 @@ class CategoryPage(BasePage):
 
     def _create_month_selector(self):
 
-        self.month_selector = QWidget()
-
-        self.month_selector.setObjectName(
-            "monthSelector"
-        )
-
-        self.month_selector_layout = QHBoxLayout(
-            self.month_selector
-        )
-
-        self.month_selector_layout.setContentsMargins(
-            0,
-            0,
-            0,
-            0,
-        )
-
-        self.month_selector_layout.setSpacing(
-            12
-        )
-
-        self.previous_month_button = QPushButton()
-
-        self.previous_month_button.setObjectName(
-            "monthNavigationButton"
-        )
-
-        self.previous_month_button.setIcon(
-            qta.icon(
-                "fa5s.chevron-left",
-                color="#94A3B8",
-            )
-        )
-
-        self.previous_month_button.setFixedSize(
-            36,
-            36,
-        )
-
-        self.month_label = QLabel()
-
-        self.month_label.setObjectName(
-            "monthLabel"
-        )
-
-        self.month_label.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )
-
-        self.next_month_button = QPushButton()
-
-        self.next_month_button.setObjectName(
-            "monthNavigationButton"
-        )
-
-        self.next_month_button.setIcon(
-            qta.icon(
-                "fa5s.chevron-right",
-                color="#94A3B8",
-            )
-        )
-
-        self.next_month_button.setFixedSize(
-            36,
-            36,
-        )
-
-        self.month_selector_layout.addStretch()
-
-        self.month_selector_layout.addWidget(
-            self.previous_month_button
-        )
-
-        self.month_selector_layout.addWidget(
-            self.month_label
-        )
-
-        self.month_selector_layout.addWidget(
-            self.next_month_button
-        )
-
-        self.month_selector_layout.addStretch()
-
-        self._update_month_label()
+        self.month_selector = MonthSelector()
 
         self.content_layout.addWidget(
             self.month_selector
-        )
-
-    def _update_month_label(self):
-
-        months = [
-            "Janeiro",
-            "Fevereiro",
-            "Março",
-            "Abril",
-            "Maio",
-            "Junho",
-            "Julho",
-            "Agosto",
-            "Setembro",
-            "Outubro",
-            "Novembro",
-            "Dezembro",
-        ]
-
-        month_name = months[
-            self.selected_month - 1
-        ]
-
-        self.month_label.setText(
-            f"{month_name} {self.selected_year}"
         )
 
     def _create_toolbar(self):
@@ -241,11 +134,11 @@ class CategoryPage(BasePage):
             self._delete_category
         )
 
-        self.previous_month_button.clicked.connect(
+        self.month_selector.previous_requested.connect(
             self._go_to_previous_month
         )
 
-        self.next_month_button.clicked.connect(
+        self.month_selector.next_requested.connect(
             self._go_to_next_month
         )
 
@@ -259,7 +152,6 @@ class CategoryPage(BasePage):
             self.selected_year -= 1
 
         self._update_month_label()
-
         self.load_categories()
 
     def _go_to_next_month(self):
@@ -272,8 +164,32 @@ class CategoryPage(BasePage):
             self.selected_year += 1
 
         self._update_month_label()
-
         self.load_categories()
+
+    def _update_month_label(self):
+
+        months = [
+            "Janeiro",
+            "Fevereiro",
+            "Março",
+            "Abril",
+            "Maio",
+            "Junho",
+            "Julho",
+            "Agosto",
+            "Setembro",
+            "Outubro",
+            "Novembro",
+            "Dezembro",
+        ]
+
+        month_name = months[
+            self.selected_month - 1
+        ]
+
+        self.month_selector.set_month_text(
+            f"{month_name} {self.selected_year}"
+        )
 
     def load_categories(self):
 
@@ -352,7 +268,8 @@ class CategoryPage(BasePage):
             self,
             "Excluir categoria",
             "Deseja realmente excluir esta categoria?",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.Yes
+            | QMessageBox.No,
             QMessageBox.No,
         )
 

@@ -1,6 +1,6 @@
-INCOME_STYLE = """
+EXPENSE_STYLE = """
 
-QScrollArea#incomeGrid {
+QScrollArea#expenseGrid {
 
     background-color: transparent;
 
@@ -8,45 +8,19 @@ QScrollArea#incomeGrid {
 }
 
 
-QScrollArea#incomeGrid QWidget#qt_scrollarea_viewport {
+QScrollArea#expenseGrid QWidget#qt_scrollarea_viewport {
 
     background-color: #111827;
 }
 
 
-QWidget#incomeGridContainer {
+QWidget#expenseGridContainer {
 
     background-color: #111827;
 }
 
 
-QWidget#incomeHeader {
-
-    background-color: #182230;
-
-    border: 1px solid #263548;
-
-    border-bottom: none;
-
-    border-top-left-radius: 16px;
-
-    border-top-right-radius: 16px;
-}
-
-
-QLabel#incomeHeaderLabel {
-
-    color: #94A3B8;
-
-    font-size: 11px;
-
-    font-weight: bold;
-
-    letter-spacing: 1px;
-}
-
-
-QWidget#incomeCard {
+QWidget#expenseCard {
 
     background-color: #111827;
 
@@ -58,13 +32,13 @@ QWidget#incomeCard {
 }
 
 
-QWidget#incomeCard:hover {
+QWidget#expenseCard:hover {
 
     background-color: #182230;
 }
 
 
-QLabel#incomeTitle {
+QLabel#expenseTitle {
 
     color: #E5E7EB;
 
@@ -74,7 +48,7 @@ QLabel#incomeTitle {
 }
 
 
-QLabel#incomeDate {
+QLabel#expenseDate {
 
     color: #64748B;
 
@@ -82,7 +56,7 @@ QLabel#incomeDate {
 }
 
 
-QLabel#incomeCategory {
+QLabel#expenseCategory {
 
     color: #94A3B8;
 
@@ -90,9 +64,9 @@ QLabel#incomeCategory {
 }
 
 
-QLabel#incomeAmount {
+QLabel#expenseAmount {
 
-    color: #34D399;
+    color: #F87171;
 
     font-size: 13px;
 
@@ -100,15 +74,15 @@ QLabel#incomeAmount {
 }
 
 
-QLabel#incomeIcon {
+QLabel#expenseIcon {
 
-    background-color: #123D35;
+    background-color: #3D2028;
 
     border-radius: 10px;
 }
 
 
-QPushButton#incomeDeleteButton {
+QPushButton#expenseDeleteButton {
 
     background-color: transparent;
 
@@ -118,13 +92,13 @@ QPushButton#incomeDeleteButton {
 }
 
 
-QPushButton#incomeDeleteButton:hover {
+QPushButton#expenseDeleteButton:hover {
 
     background-color: #263548;
 }
 
 
-QPushButton#incomeDeleteButton:pressed {
+QPushButton#expenseDeleteButton:pressed {
 
     background-color: #334155;
 }
@@ -155,4 +129,5 @@ QScrollBar::sub-line:vertical {
 
     height: 0px;
 }
+
 """
