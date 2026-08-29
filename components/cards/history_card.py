@@ -1,10 +1,15 @@
+from PySide6.QtCore import Qt
+
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
 )
 
 from components.cards.base_card import BaseCard
-from enums.transaction_type import TransactionType
+
+from enums.transaction_type import (
+    TransactionType,
+)
 
 
 class HistoryCard(BaseCard):
@@ -25,20 +30,59 @@ class HistoryCard(BaseCard):
         self.transaction_date = transaction_date
         self.transaction_type = transaction_type
 
+        self.setObjectName(
+            "historyCard"
+        )
+
         self._setup_ui()
 
     def _setup_ui(self):
 
-        layout = QHBoxLayout()
+        self.layout.setContentsMargins(
+            28,
+            18,
+            28,
+            18,
+        )
 
-        self._create_date(layout)
-        self._create_title(layout)
-        self._create_category(layout)
-        self._create_amount(layout)
+        self.layout.setSpacing(
+            20
+        )
 
-        self.layout.addLayout(layout)
+        self._create_content()
 
-    def _create_date(self, layout):
+    def _create_content(self):
+
+        row_layout = QHBoxLayout()
+
+        row_layout.setSpacing(
+            20
+        )
+
+        self._create_date(
+            row_layout
+        )
+
+        self._create_title(
+            row_layout
+        )
+
+        self._create_category(
+            row_layout
+        )
+
+        self._create_amount(
+            row_layout
+        )
+
+        self.layout.addLayout(
+            row_layout
+        )
+
+    def _create_date(
+        self,
+        layout,
+    ):
 
         date_label = QLabel(
             self.transaction_date
@@ -48,57 +92,119 @@ class HistoryCard(BaseCard):
             "historyDate"
         )
 
-        layout.addWidget(date_label)
+        date_label.setAlignment(
+            Qt.AlignmentFlag.AlignLeft
+            | Qt.AlignmentFlag.AlignVCenter
+        )
 
-    def _create_title(self, layout):
+        layout.addWidget(
+            date_label,
+            2,
+        )
 
-        title = QLabel(self.title)
+    def _create_title(
+        self,
+        layout,
+    ):
 
-        title.setObjectName(
+        title_label = QLabel(
+            self.title
+        )
+
+        title_label.setObjectName(
             "historyTitle"
         )
 
-        layout.addWidget(title)
+        title_label.setAlignment(
+            Qt.AlignmentFlag.AlignLeft
+            | Qt.AlignmentFlag.AlignVCenter
+        )
 
-    def _create_category(self, layout):
+        layout.addWidget(
+            title_label,
+            4,
+        )
 
-        category = QLabel(
+    def _create_category(
+        self,
+        layout,
+    ):
+
+        category_label = QLabel(
             self.category_name
         )
 
-        category.setObjectName(
+        category_label.setObjectName(
             "historyCategory"
         )
 
-        layout.addWidget(category)
+        category_label.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+            | Qt.AlignmentFlag.AlignVCenter
+        )
 
-    def _create_amount(self, layout):
+        layout.addWidget(
+            category_label,
+            2,
+        )
 
-        is_income = (
-            self.transaction_type
+    def _create_amount(
+        self,
+        layout,
+    ):
+
+        amount_label = QLabel(
+            self._format_currency()
+        )
+
+        amount_label.setObjectName(
+            self._get_amount_object_name()
+        )
+
+        amount_label.setAlignment(
+            Qt.AlignmentFlag.AlignRight
+            | Qt.AlignmentFlag.AlignVCenter
+        )
+
+        layout.addWidget(
+            amount_label,
+            2,
+        )
+
+    def _format_currency(self):
+
+        prefix = (
+            "+"
+            if self.transaction_type
             == TransactionType.INCOME
+            else "-"
         )
 
-        prefix = "+" if is_income else "-"
-
-        amount_text = (
-            f"{prefix} R$ "
+        formatted_amount = (
             f"{self.amount:,.2f}"
-        )
-
-        amount_text = (
-            amount_text
             .replace(",", "X")
             .replace(".", ",")
             .replace("X", ".")
         )
 
-        amount = QLabel(amount_text)
-
-        amount.setObjectName(
-            "historyIncomeAmount"
-            if is_income
-            else "historyExpenseAmount"
+        return (
+            f"{prefix}R$ "
+            f"{formatted_amount}"
         )
 
-        layout.addWidget(amount)
+    def _get_amount_object_name(
+        self,
+    ):
+
+        if (
+            self.transaction_type
+            == TransactionType.INCOME
+        ):
+
+            return (
+                "historyIncomeAmount"
+            )
+
+        return (
+            "historyExpenseAmount"
+        )

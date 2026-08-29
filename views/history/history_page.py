@@ -1,32 +1,46 @@
+from datetime import (
+    date,
+    timedelta,
+)
+
+from PySide6.QtCore import Qt
+
 from PySide6.QtWidgets import (
-    QComboBox,
     QHBoxLayout,
-    QLineEdit,
     QLabel,
 )
 
-from components.containers.history_grid import HistoryGrid
+from components.containers.history_grid import (
+    HistoryGrid,
+)
+
+from components.filters.history_filters import HistoryFilters
+
+from components.empty_state import (
+    EmptyState,
+)
 
 from database.connection import get_session
+
+from enums.transaction_type import (
+    TransactionType,
+)
 
 from repositories.transaction_repository import (
     TransactionRepository,
 )
 
-from services.history_service import HistoryService
+from services.history_service import (
+    HistoryService,
+)
 
 from views.base.base_page import BasePage
-
-from enums.transaction_type import TransactionType
-
-from datetime import date, timedelta
-
-from components.empty_state import EmptyState
 
 
 class HistoryPage(BasePage):
 
     def __init__(self):
+
         super().__init__(
             "Histórico",
             "Todas as suas movimentações.",
@@ -56,44 +70,96 @@ class HistoryPage(BasePage):
     def _setup_page(self):
 
         self._create_filters()
+        self._create_headers()
         self._create_history_grid()
 
     def _create_filters(self):
 
-        filters_layout = QHBoxLayout()
-
-        self.search_input = QLineEdit()
-
-        self.search_input.setPlaceholderText(
-            "Buscar movimentação..."
+        self.history_filters = (
+            HistoryFilters()
         )
 
-        self.type_filter = QComboBox()
-
-        self.type_filter.addItem("Todos")
-        self.type_filter.addItem("Receitas")
-        self.type_filter.addItem("Despesas")
-
-        self.period_filter = QComboBox()
-
-        self.period_filter.addItem("Todos")
-        self.period_filter.addItem("Este mês")
-        self.period_filter.addItem("Mês passado")
-
-        filters_layout.addWidget(
-            self.search_input
+        self.content_layout.addWidget(
+            self.history_filters
         )
 
-        filters_layout.addWidget(
-            self.type_filter
+    def _create_headers(self):
+
+        self.headers_widget = QLabel()
+
+        headers_layout = QHBoxLayout()
+
+        headers_layout.setContentsMargins(
+            28,
+            0,
+            28,
+            0,
         )
 
-        filters_layout.addWidget(
-            self.period_filter
+        headers_layout.setSpacing(
+            20
         )
 
-        self.content_layout.addLayout(
-            filters_layout
+        self.headers_widget.setLayout(
+            headers_layout
+        )
+
+        self._create_header(
+            headers_layout,
+            "DATA",
+            2,
+            Qt.AlignmentFlag.AlignLeft,
+        )
+
+        self._create_header(
+            headers_layout,
+            "DESCRIÇÃO",
+            4,
+            Qt.AlignmentFlag.AlignLeft,
+        )
+
+        self._create_header(
+            headers_layout,
+            "CATEGORIA",
+            2,
+            Qt.AlignmentFlag.AlignCenter,
+        )
+
+        self._create_header(
+            headers_layout,
+            "VALOR",
+            2,
+            Qt.AlignmentFlag.AlignCenter,
+        )
+
+        self.content_layout.addWidget(
+            self.headers_widget
+        )
+
+    def _create_header(
+        self,
+        layout,
+        text,
+        stretch,
+        alignment,
+    ):
+
+        label = QLabel(
+            text
+        )
+
+        label.setObjectName(
+            "historyHeader"
+        )
+
+        label.setAlignment(
+            alignment
+            | Qt.AlignmentFlag.AlignVCenter
+        )
+
+        layout.addWidget(
+            label,
+            stretch,
         )
 
     def _create_history_grid(self):
@@ -111,24 +177,18 @@ class HistoryPage(BasePage):
         self.empty_state.hide()
 
         self.content_layout.addWidget(
-            self.history_grid
+            self.history_grid,
+            1,
         )
 
         self.content_layout.addWidget(
-            self.empty_state
+            self.empty_state,
+            1,
         )
 
     def _connect_signals(self):
 
-        self.search_input.textChanged.connect(
-            self._on_filters_changed
-        )
-
-        self.type_filter.currentIndexChanged.connect(
-            self._on_filters_changed
-        )
-
-        self.period_filter.currentIndexChanged.connect(
+        self.history_filters.filters_changed.connect(
             self._on_filters_changed
         )
 
@@ -139,29 +199,21 @@ class HistoryPage(BasePage):
     def load_transactions(self):
 
         selected_type = (
-            self.type_filter.currentText()
+            self.history_filters.type_filter.currentText()
         )
 
-        transaction_type = None
-
-        if selected_type == "Receitas":
-
-            transaction_type = (
-                TransactionType.INCOME
+        transaction_type = (
+            self._get_transaction_type(
+                selected_type
             )
-
-        elif selected_type == "Despesas":
-
-            transaction_type = (
-                TransactionType.EXPENSE
-            )
+        )
 
         start_date, end_date = (
             self._get_period_dates()
         )
 
         search_text = (
-            self.search_input.text()
+            self.history_filters.search_input.text()
         )
 
         transactions = (
@@ -180,38 +232,37 @@ class HistoryPage(BasePage):
         if not transactions:
             return
 
-        transaction_data = []
-
-        for transaction in transactions:
-
-            transaction_data.append(
-                {
-                    "title": transaction.description,
-                    "amount": transaction.amount,
-                    "category_name": (
-                        transaction.category.name
-                        if transaction.category is not None
-                        else "Sem categoria"
-                    ),
-                    "transaction_date": (
-                        transaction.transaction_date.strftime(
-                            "%d/%m/%Y"
-                        )
-                    ),
-                    "transaction_type": (
-                        transaction.transaction_type
-                    ),
-                }
+        transaction_data = (
+            self._format_transactions(
+                transactions
             )
+        )
 
         self.history_grid.set_transactions(
             transaction_data
         )
 
+    def _get_transaction_type(
+        self,
+        selected_type: str,
+    ):
+
+        if selected_type == "Receitas":
+
+            return TransactionType.INCOME
+
+        if selected_type == "Despesas":
+
+            return TransactionType.EXPENSE
+
+        return None
+
     def _get_period_dates(self):
 
         selected_period = (
-            self.period_filter.currentText()
+            self.history_filters
+            .period_filter
+            .currentText()
         )
 
         today = date.today()
@@ -232,12 +283,16 @@ class HistoryPage(BasePage):
         if selected_period == "Mês passado":
 
             first_day_current_month = (
-                today.replace(day=1)
+                today.replace(
+                    day=1
+                )
             )
 
             end_date = (
                 first_day_current_month
-                - timedelta(days=1)
+                - timedelta(
+                    days=1
+                )
             )
 
             start_date = end_date.replace(
@@ -260,7 +315,9 @@ class HistoryPage(BasePage):
             self.history_service.get_all()
         )
 
-        return len(transactions) > 0
+        return len(
+            transactions
+        ) > 0
 
     def _update_empty_state(
         self,
@@ -269,11 +326,13 @@ class HistoryPage(BasePage):
 
         if transactions:
 
+            self.headers_widget.show()
             self.history_grid.show()
             self.empty_state.hide()
 
             return
 
+        self.headers_widget.hide()
         self.history_grid.hide()
 
         has_transactions = (
@@ -306,26 +365,41 @@ class HistoryPage(BasePage):
 
         self.empty_state.show()
 
-    def _refresh_empty_state(self):
+    def _format_transactions(
+        self,
+        transactions,
+    ):
 
-        title_label = (
-            self.empty_state.findChild(
-                QLabel,
-                "emptyStateTitle",
+        transaction_data = []
+
+        for transaction in transactions:
+
+            transaction_data.append(
+                {
+                    "title": (
+                        transaction.description
+                    ),
+                    "amount": (
+                        transaction.amount
+                    ),
+                    "category_name": (
+                        transaction.category.name
+                        if transaction.category
+                        is not None
+                        else "Sem categoria"
+                    ),
+                    "transaction_date": (
+                        transaction
+                        .transaction_date
+                        .strftime(
+                            "%d/%m/%Y"
+                        )
+                    ),
+                    "transaction_type": (
+                        transaction
+                        .transaction_type
+                    ),
+                }
             )
-        )
 
-        description_label = (
-            self.empty_state.findChild(
-                QLabel,
-                "emptyStateDescription",
-            )
-        )
-
-        title_label.setText(
-            self.empty_state.title
-        )
-
-        description_label.setText(
-            self.empty_state.description
-        )
+        return transaction_data

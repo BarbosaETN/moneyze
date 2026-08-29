@@ -22,6 +22,10 @@ from styles.summary_card import SUMMARY_CARD_STYLE
 
 from styles.empty_state import EMPTY_STATE_STYLE
 
+from styles.history  import HISTORY_STYLE
+
+from styles.history_filters import HISTORY_FILTERS_STYLE
+
 
 THEME = f"""
 
@@ -46,6 +50,10 @@ THEME = f"""
 {SUMMARY_CARD_STYLE}
 
 {EMPTY_STATE_STYLE}
+
+{HISTORY_STYLE}
+
+{HISTORY_FILTERS_STYLE}
 
 """
 
