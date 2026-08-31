@@ -6,7 +6,6 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QProgressBar,
-    QVBoxLayout,
 )
 
 from components.cards.base_card import (
@@ -23,6 +22,7 @@ class DashboardCategoryCard(BaseCard):
         spent: float,
         percentage: float,
     ):
+
         super().__init__()
 
         self.name = name
@@ -54,7 +54,10 @@ class DashboardCategoryCard(BaseCard):
     def _create_content(self):
 
         self._create_header()
+
         self._create_progress_bar()
+
+        self._create_budget_label()
 
     def _create_header(self):
 
@@ -100,11 +103,11 @@ class DashboardCategoryCard(BaseCard):
     ):
 
         percentage_label = QLabel(
-            f"{self.percentage:.0f}%"
+            self._get_percentage_text()
         )
 
         percentage_label.setObjectName(
-            "dashboardCategoryPercentage"
+            self._get_percentage_object_name()
         )
 
         percentage_label.setAlignment(
@@ -121,12 +124,12 @@ class DashboardCategoryCard(BaseCard):
         self.progress_bar = QProgressBar()
 
         self.progress_bar.setObjectName(
-            "dashboardCategoryProgress"
+            self._get_progress_object_name()
         )
 
         self.progress_bar.setRange(
             0,
-            100
+            100,
         )
 
         progress_value = min(
@@ -146,8 +149,6 @@ class DashboardCategoryCard(BaseCard):
             self.progress_bar
         )
 
-        self._create_budget_label()
-
     def _create_budget_label(self):
 
         budget_label = QLabel(
@@ -155,11 +156,99 @@ class DashboardCategoryCard(BaseCard):
         )
 
         budget_label.setObjectName(
-            "dashboardCategoryBudget"
+            self._get_budget_object_name()
         )
 
         self.layout.addWidget(
             budget_label
+        )
+
+    def _get_status(self):
+
+        if self.percentage > 100:
+
+            return "exceeded"
+
+        if self.percentage >= 80:
+
+            return "warning"
+
+        return "normal"
+
+    def _get_percentage_text(self):
+
+        percentage_text = (
+            f"{self.percentage:.0f}%"
+        )
+
+        status = self._get_status()
+
+        if status == "warning":
+
+            return (
+                f"{percentage_text} • Atenção"
+            )
+
+        if status == "exceeded":
+
+            return (
+                f"{percentage_text} • Ultrapassado"
+            )
+
+        return percentage_text
+
+    def _get_percentage_object_name(self):
+
+        status = self._get_status()
+
+        if status == "warning":
+
+            return (
+                "dashboardCategoryPercentageWarning"
+            )
+
+        if status == "exceeded":
+
+            return (
+                "dashboardCategoryPercentageExceeded"
+            )
+
+        return (
+            "dashboardCategoryPercentage"
+        )
+
+    def _get_progress_object_name(self):
+
+        status = self._get_status()
+
+        if status == "warning":
+
+            return (
+                "dashboardCategoryProgressWarning"
+            )
+
+        if status == "exceeded":
+
+            return (
+                "dashboardCategoryProgressExceeded"
+            )
+
+        return (
+            "dashboardCategoryProgress"
+        )
+
+    def _get_budget_object_name(self):
+
+        status = self._get_status()
+
+        if status == "exceeded":
+
+            return (
+                "dashboardCategoryBudgetExceeded"
+            )
+
+        return (
+            "dashboardCategoryBudget"
         )
 
     def _format_budget_text(self):
@@ -172,9 +261,17 @@ class DashboardCategoryCard(BaseCard):
             self.budget
         )
 
-        return (
+        text = (
             f"{spent} de {budget}"
         )
+
+        if self._get_status() == "exceeded":
+
+            return (
+                f"{text} • Orçamento ultrapassado"
+            )
+
+        return text
 
     def _format_currency(
         self,

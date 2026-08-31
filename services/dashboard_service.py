@@ -90,7 +90,17 @@ class DashboardService:
             ),
         }
 
-    def get_category_summary(self):
+    def get_category_summary(
+        self,
+    ):
+
+        today = date.today()
+
+        start_date = (
+            today.replace(
+                day=1
+            )
+        )
 
         categories = (
             self.category_repository.get_all()
@@ -103,7 +113,9 @@ class DashboardService:
             spent = (
                 self.transaction_repository
                 .get_expense_total_by_category(
-                    category_id=category.id
+                    category_id=category.id,
+                    start_date=start_date,
+                    end_date=today,
                 )
             )
 

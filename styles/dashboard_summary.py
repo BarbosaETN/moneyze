@@ -161,6 +161,10 @@ QLabel#dashboardCategoryName {
 }
 
 
+/* =========================
+   PORCENTAGEM NORMAL
+========================= */
+
 QLabel#dashboardCategoryPercentage {
     color: #94A3B8;
 
@@ -174,6 +178,44 @@ QLabel#dashboardCategoryPercentage {
 }
 
 
+/* =========================
+   PORCENTAGEM EM ALERTA
+========================= */
+
+QLabel#dashboardCategoryPercentageWarning {
+    color: #FBBF24;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+
+/* =========================
+   ORÇAMENTO ULTRAPASSADO
+========================= */
+
+QLabel#dashboardCategoryPercentageExceeded {
+    color: #F87171;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+
+/* =========================
+   TEXTO DO ORÇAMENTO
+========================= */
+
 QLabel#dashboardCategoryBudget {
     color: #64748B;
 
@@ -184,6 +226,23 @@ QLabel#dashboardCategoryBudget {
     border: none;
 }
 
+
+QLabel#dashboardCategoryBudgetExceeded {
+    color: #F87171;
+
+    font-size: 11px;
+
+    font-weight: 500;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+
+/* =========================
+   BARRA NORMAL
+========================= */
 
 QProgressBar#dashboardCategoryProgress {
     background-color: #263548;
@@ -198,6 +257,50 @@ QProgressBar#dashboardCategoryProgress {
 
 QProgressBar#dashboardCategoryProgress::chunk {
     background-color: #34D399;
+
+    border-radius: 4px;
+}
+
+
+/* =========================
+   BARRA EM ALERTA
+========================= */
+
+QProgressBar#dashboardCategoryProgressWarning {
+    background-color: #263548;
+
+    border: none;
+
+    border-radius: 4px;
+
+    height: 8px;
+}
+
+
+QProgressBar#dashboardCategoryProgressWarning::chunk {
+    background-color: #FBBF24;
+
+    border-radius: 4px;
+}
+
+
+/* =========================
+   BARRA ULTRAPASSADA
+========================= */
+
+QProgressBar#dashboardCategoryProgressExceeded {
+    background-color: #263548;
+
+    border: none;
+
+    border-radius: 4px;
+
+    height: 8px;
+}
+
+
+QProgressBar#dashboardCategoryProgressExceeded::chunk {
+    background-color: #F87171;
 
     border-radius: 4px;
 }
