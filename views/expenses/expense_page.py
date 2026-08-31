@@ -9,6 +9,10 @@ from components.cards.summary_card import (
     SummaryCard,
 )
 
+from core.data_events import (
+    data_events,
+)
+
 from components.containers.expense_grid import (
     ExpenseGrid,
 )
@@ -353,6 +357,8 @@ class ExpensePage(BasePage):
                 **data
             )
 
+            data_events.transactions_changed.emit()
+
             self.load_expenses()
 
             QMessageBox.information(
@@ -406,6 +412,8 @@ class ExpensePage(BasePage):
             self.transaction_service.delete_by_id(
                 transaction_id
             )
+
+            data_events.transactions_changed.emit()
 
             self.load_expenses()
 

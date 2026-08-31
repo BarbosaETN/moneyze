@@ -406,7 +406,7 @@ class HistoryPage(BasePage):
                         transaction.category.name
                         if transaction.category
                         is not None
-                        else "Sem categoria"
+                        else "Receita"
                     ),
                     "transaction_date": (
                         transaction

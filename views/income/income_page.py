@@ -16,6 +16,10 @@ from components.cards.summary_card import (
     SummaryCard,
 )
 
+from core.data_events import (
+    data_events,
+)
+
 from components.containers.income_grid import (
     IncomeGrid,
 )
@@ -301,6 +305,8 @@ class IncomePage(BasePage):
                 **data
             )
 
+            data_events.transactions_changed.emit()
+
             self.load_incomes()
 
             QMessageBox.information(
@@ -357,6 +363,8 @@ class IncomePage(BasePage):
             self.transaction_service.delete_by_id(
                 transaction_id
             )
+
+            data_events.transactions_changed.emit()
 
             self.load_incomes()
 

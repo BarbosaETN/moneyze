@@ -104,6 +104,10 @@ class MainWindow(QMainWindow):
 
         if page:
 
+            if page_id == "dashboard":
+
+                page.refresh()
+
             self.content.setCurrentWidget(
                 page
             )

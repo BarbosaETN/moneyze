@@ -81,3 +81,214 @@ QLabel#cashFlowPlaceholder {
 }
 
 """
+
+DASHBOARD_CATEGORY_LIST_STYLE = """
+
+QScrollArea#dashboardCategoryList {
+    background-color: transparent;
+    border: none;
+}
+
+
+QWidget#dashboardCategoryListContent {
+    background-color: transparent;
+}
+
+
+QScrollArea#dashboardCategoryList QScrollBar:vertical {
+    background-color: transparent;
+
+    width: 8px;
+
+    margin: 4px 0px 4px 0px;
+
+    border: none;
+}
+
+
+QScrollArea#dashboardCategoryList QScrollBar::handle:vertical {
+    background-color: #263548;
+
+    border-radius: 4px;
+
+    min-height: 30px;
+}
+
+
+QScrollArea#dashboardCategoryList QScrollBar::handle:vertical:hover {
+    background-color: #334155;
+}
+
+
+QScrollArea#dashboardCategoryList QScrollBar::add-line:vertical,
+QScrollArea#dashboardCategoryList QScrollBar::sub-line:vertical {
+    height: 0px;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+
+QScrollArea#dashboardCategoryList QScrollBar::add-page:vertical,
+QScrollArea#dashboardCategoryList QScrollBar::sub-page:vertical {
+    background-color: transparent;
+}
+
+"""
+
+DASHBOARD_CATEGORY_CARD_STYLE = """
+
+QFrame#dashboardCategoryCard {
+    background-color: #182230;
+
+    border: 1px solid #263548;
+
+    border-radius: 12px;
+}
+
+
+QLabel#dashboardCategoryName {
+    color: #E5E7EB;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+
+QLabel#dashboardCategoryPercentage {
+    color: #94A3B8;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+
+QLabel#dashboardCategoryBudget {
+    color: #64748B;
+
+    font-size: 11px;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+
+QProgressBar#dashboardCategoryProgress {
+    background-color: #263548;
+
+    border: none;
+
+    border-radius: 4px;
+
+    height: 8px;
+}
+
+
+QProgressBar#dashboardCategoryProgress::chunk {
+    background-color: #34D399;
+
+    border-radius: 4px;
+}
+
+"""
+
+CATEGORY_SECTION_STYLE = """
+
+QFrame#categorySection {
+    background-color: transparent;
+
+    border: none;
+}
+
+
+QLabel#categoryEmptyState {
+    color: #64748B;
+
+    font-size: 13px;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+"""
+
+CASH_FLOW_EMPTY_STATE_STYLE = """
+
+QWidget#cashFlowEmptyState {
+    background-color: transparent;
+
+    border: none;
+}
+
+
+QLabel#cashFlowEmptyStateTitle {
+    color: #CBD5E1;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+
+QLabel#cashFlowEmptyStateDescription {
+    color: #64748B;
+
+    font-size: 12px;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+"""
+
+CATEGORY_EMPTY_STATE_STYLE = """
+
+QWidget#categoryEmptyState {
+    background-color: transparent;
+
+    border: none;
+}
+
+
+QLabel#categoryEmptyStateTitle {
+    color: #CBD5E1;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+
+QLabel#categoryEmptyStateDescription {
+    color: #64748B;
+
+    font-size: 12px;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+"""

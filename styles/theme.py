@@ -30,6 +30,16 @@ from styles.dashboard_summary import DASHBOARD_SUMMARY_STYLE
 
 from styles.dashboard_summary import CASH_FLOW_SECTION_STYLE
 
+from styles.dashboard_summary import DASHBOARD_CATEGORY_LIST_STYLE
+
+from styles.dashboard_summary import DASHBOARD_CATEGORY_CARD_STYLE
+
+from styles.dashboard_summary import CATEGORY_SECTION_STYLE
+
+from styles.dashboard_summary import CASH_FLOW_EMPTY_STATE_STYLE
+
+from styles.dashboard_summary import CATEGORY_EMPTY_STATE_STYLE
+
 
 THEME = f"""
 
@@ -62,6 +72,16 @@ THEME = f"""
 {DASHBOARD_SUMMARY_STYLE}
 
 {CASH_FLOW_SECTION_STYLE}
+
+{DASHBOARD_CATEGORY_LIST_STYLE}
+
+{DASHBOARD_CATEGORY_CARD_STYLE}
+
+{CATEGORY_SECTION_STYLE}
+
+{CASH_FLOW_EMPTY_STATE_STYLE}
+
+{CATEGORY_EMPTY_STATE_STYLE}
 
 """
 

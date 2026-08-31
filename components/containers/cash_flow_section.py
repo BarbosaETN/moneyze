@@ -1,25 +1,24 @@
-from PySide6.QtCore import (
-    Qt,
-)
-
 from PySide6.QtWidgets import (
     QLabel,
-    QStackedLayout,
-    QWidget,
 )
 
 from components.cards.base_card import (
     BaseCard,
 )
 
-from components.empty_state import (
-    EmptyState,
+from components.charts.cash_flow_chart import (
+    CashFlowChart,
+)
+
+from components.empty_states.cash_flow_empty_state import (
+    CashFlowEmptyState,
 )
 
 
 class CashFlowSection(BaseCard):
 
     def __init__(self):
+
         super().__init__()
 
         self.setObjectName(
@@ -46,6 +45,7 @@ class CashFlowSection(BaseCard):
         )
 
         self._create_header()
+
         self._create_content()
 
     def _create_header(self):
@@ -76,66 +76,60 @@ class CashFlowSection(BaseCard):
 
     def _create_content(self):
 
-        self.content_widget = QWidget()
-
-        self.content_widget.setObjectName(
-            "cashFlowContent"
+        self.cash_flow_chart = (
+            CashFlowChart()
         )
 
-        self.content_layout = QStackedLayout(
-            self.content_widget
+        self.cash_flow_empty_state = (
+            CashFlowEmptyState()
         )
-
-        self._create_empty_state()
-        self._create_chart_placeholder()
 
         self.layout.addWidget(
-            self.content_widget,
+            self.cash_flow_chart,
             1,
         )
 
-    def _create_empty_state(self):
-
-        self.empty_state = EmptyState(
-            title=(
-                "Nenhum dado disponível"
-            ),
-            description=(
-                "Adicione receitas e despesas "
-                "para acompanhar seu fluxo."
-            ),
+        self.layout.addWidget(
+            self.cash_flow_empty_state,
+            1,
         )
 
-        self.content_layout.addWidget(
-            self.empty_state
+        self.cash_flow_empty_state.hide()
+
+    def set_cash_flow(
+        self,
+        cash_flow_data,
+    ):
+
+        has_transactions = (
+            self._has_transactions(
+                cash_flow_data
+            )
         )
 
-    def _create_chart_placeholder(self):
+        if has_transactions:
 
-        self.chart_placeholder = QLabel(
-            "Gráfico de fluxo de caixa"
-        )
+            self.cash_flow_empty_state.hide()
 
-        self.chart_placeholder.setObjectName(
-            "cashFlowChartPlaceholder"
-        )
+            self.cash_flow_chart.show()
 
-        self.chart_placeholder.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )
+            self.cash_flow_chart.set_data(
+                cash_flow_data
+            )
 
-        self.content_layout.addWidget(
-            self.chart_placeholder
-        )
+        else:
 
-    def show_empty_state(self):
+            self.cash_flow_chart.hide()
 
-        self.content_layout.setCurrentWidget(
-            self.empty_state
-        )
+            self.cash_flow_empty_state.show()
 
-    def show_chart(self):
+    def _has_transactions(
+        self,
+        cash_flow_data,
+    ):
 
-        self.content_layout.setCurrentWidget(
-            self.chart_placeholder
+        return any(
+            month["income"] > 0
+            or month["expense"] > 0
+            for month in cash_flow_data
         )

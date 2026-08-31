@@ -175,8 +175,8 @@ class TransactionRepository(BaseRepository):
     def get_expense_total_by_category(
         self,
         category_id: int,
-        start_date,
-        end_date,
+        start_date=None,
+        end_date=None,
     ):
 
         statement = (
@@ -194,14 +194,22 @@ class TransactionRepository(BaseRepository):
 
                 Transaction.transaction_type
                 == TransactionType.EXPENSE,
-
-                Transaction.transaction_date
-                >= start_date,
-
-                Transaction.transaction_date
-                <= end_date,
             )
         )
+
+        if start_date is not None:
+
+            statement = statement.where(
+                Transaction.transaction_date
+                >= start_date
+            )
+
+        if end_date is not None:
+
+            statement = statement.where(
+                Transaction.transaction_date
+                <= end_date
+            )
 
         return self.session.scalar(
             statement

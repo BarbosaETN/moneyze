@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import (
     QHBoxLayout,
+    QSizePolicy,
     QWidget,
 )
 
@@ -7,6 +8,7 @@ from PySide6.QtWidgets import (
 class DashboardContent(QWidget):
 
     def __init__(self):
+
         super().__init__()
 
         self.setObjectName(
@@ -37,6 +39,11 @@ class DashboardContent(QWidget):
         widget,
     ):
 
+        widget.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Expanding,
+        )
+
         self.layout.addWidget(
             widget,
             2,
@@ -46,6 +53,11 @@ class DashboardContent(QWidget):
         self,
         widget,
     ):
+
+        widget.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Expanding,
+        )
 
         self.layout.addWidget(
             widget,
