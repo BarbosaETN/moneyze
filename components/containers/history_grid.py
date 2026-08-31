@@ -60,7 +60,7 @@ class HistoryGrid(QScrollArea):
         transactions,
     ):
 
-        self._clear()
+        self.clear_transactions()
 
         for transaction in transactions:
 
@@ -90,7 +90,7 @@ class HistoryGrid(QScrollArea):
 
         self.layout.addStretch()
 
-    def _clear(self):
+    def clear_transactions(self):
 
         while self.layout.count():
 

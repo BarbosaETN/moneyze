@@ -111,15 +111,15 @@ class HistoryFilters(QWidget):
     def _connect_signals(self):
 
         self.search_input.textChanged.connect(
-            lambda: self.filters_changed.emit()
+            lambda _: self.filters_changed.emit()
         )
 
         self.type_filter.currentIndexChanged.connect(
-            lambda: self.filters_changed.emit()
+            lambda _: self.filters_changed.emit()
         )
 
         self.period_filter.currentIndexChanged.connect(
-            lambda: self.filters_changed.emit()
+            lambda _: self.filters_changed.emit()
         )
 
     def get_search_text(self):

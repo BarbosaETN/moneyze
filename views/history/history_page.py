@@ -8,19 +8,24 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
+    QWidget,
 )
 
 from components.containers.history_grid import (
     HistoryGrid,
 )
 
-from components.filters.history_filters import HistoryFilters
-
 from components.empty_state import (
     EmptyState,
 )
 
-from database.connection import get_session
+from components.filters.history_filters import (
+    HistoryFilters,
+)
+
+from database.connection import (
+    get_session,
+)
 
 from enums.transaction_type import (
     TransactionType,
@@ -34,7 +39,9 @@ from services.history_service import (
     HistoryService,
 )
 
-from views.base.base_page import BasePage
+from views.base.base_page import (
+    BasePage,
+)
 
 
 class HistoryPage(BasePage):
@@ -63,8 +70,10 @@ class HistoryPage(BasePage):
             )
         )
 
-        self.history_service = HistoryService(
-            transaction_repository
+        self.history_service = (
+            HistoryService(
+                transaction_repository
+            )
         )
 
     def _setup_page(self):
@@ -85,9 +94,11 @@ class HistoryPage(BasePage):
 
     def _create_headers(self):
 
-        self.headers_widget = QLabel()
+        self.headers_widget = QWidget()
 
-        headers_layout = QHBoxLayout()
+        headers_layout = QHBoxLayout(
+            self.headers_widget
+        )
 
         headers_layout.setContentsMargins(
             28,
@@ -98,10 +109,6 @@ class HistoryPage(BasePage):
 
         headers_layout.setSpacing(
             20
-        )
-
-        self.headers_widget.setLayout(
-            headers_layout
         )
 
         self._create_header(
@@ -164,14 +171,20 @@ class HistoryPage(BasePage):
 
     def _create_history_grid(self):
 
-        self.history_grid = HistoryGrid()
+        self.history_grid = (
+            HistoryGrid()
+        )
 
-        self.empty_state = EmptyState(
-            title="Nenhuma transação cadastrada",
-            description=(
-                "Adicione uma receita ou despesa "
-                "para começar a acompanhar suas finanças."
-            ),
+        self.empty_state = (
+            EmptyState(
+                title=(
+                    "Nenhuma transação cadastrada"
+                ),
+                description=(
+                    "Adicione uma receita ou despesa "
+                    "para começar a acompanhar suas finanças."
+                ),
+            )
         )
 
         self.empty_state.hide()
@@ -198,38 +211,14 @@ class HistoryPage(BasePage):
 
     def load_transactions(self):
 
-        selected_type = (
-            self.history_filters.type_filter.currentText()
-        )
-
-        transaction_type = (
-            self._get_transaction_type(
-                selected_type
-            )
-        )
-
-        start_date, end_date = (
-            self._get_period_dates()
-        )
-
-        search_text = (
-            self.history_filters.search_input.text()
-        )
-
         transactions = (
-            self.history_service.get_transactions(
-                transaction_type=transaction_type,
-                start_date=start_date,
-                end_date=end_date,
-                search_text=search_text,
-            )
-        )
-
-        self._update_empty_state(
-            transactions
+            self._get_filtered_transactions()
         )
 
         if not transactions:
+
+            self._show_empty_state()
+
             return
 
         transaction_data = (
@@ -238,14 +227,40 @@ class HistoryPage(BasePage):
             )
         )
 
-        self.history_grid.set_transactions(
+        self._show_transactions(
             transaction_data
         )
 
-    def _get_transaction_type(
-        self,
-        selected_type: str,
-    ):
+    def _get_filtered_transactions(self):
+
+        transaction_type = (
+            self._get_selected_transaction_type()
+        )
+
+        start_date, end_date = (
+            self._get_period_dates()
+        )
+
+        search_text = (
+            self._get_search_text()
+        )
+
+        return (
+            self.history_service.get_transactions(
+                transaction_type=transaction_type,
+                start_date=start_date,
+                end_date=end_date,
+                search_text=search_text,
+            )
+        )
+
+    def _get_selected_transaction_type(self):
+
+        selected_type = (
+            self.history_filters
+            .type_filter
+            .currentText()
+        )
 
         if selected_type == "Receitas":
 
@@ -256,6 +271,15 @@ class HistoryPage(BasePage):
             return TransactionType.EXPENSE
 
         return None
+
+    def _get_search_text(self):
+
+        return (
+            self.history_filters
+            .search_input
+            .text()
+            .strip()
+        )
 
     def _get_period_dates(self):
 
@@ -269,15 +293,11 @@ class HistoryPage(BasePage):
 
         if selected_period == "Este mês":
 
-            start_date = today.replace(
-                day=1
-            )
-
-            end_date = today
-
             return (
-                start_date,
-                end_date,
+                today.replace(
+                    day=1
+                ),
+                today,
             )
 
         if selected_period == "Mês passado":
@@ -295,8 +315,10 @@ class HistoryPage(BasePage):
                 )
             )
 
-            start_date = end_date.replace(
-                day=1
+            start_date = (
+                end_date.replace(
+                    day=1
+                )
             )
 
             return (
@@ -309,37 +331,25 @@ class HistoryPage(BasePage):
             None,
         )
 
-    def _has_transactions(self):
-
-        transactions = (
-            self.history_service.get_all()
-        )
-
-        return len(
-            transactions
-        ) > 0
-
-    def _update_empty_state(
+    def _show_transactions(
         self,
-        transactions,
+        transaction_data,
     ):
 
-        if transactions:
+        self.headers_widget.show()
+        self.history_grid.show()
+        self.empty_state.hide()
 
-            self.headers_widget.show()
-            self.history_grid.show()
-            self.empty_state.hide()
+        self.history_grid.set_transactions(
+            transaction_data
+        )
 
-            return
+    def _show_empty_state(self):
 
         self.headers_widget.hide()
         self.history_grid.hide()
 
-        has_transactions = (
-            self._has_transactions()
-        )
-
-        if has_transactions:
+        if self._has_transactions():
 
             self.empty_state.set_content(
                 title=(
@@ -364,6 +374,16 @@ class HistoryPage(BasePage):
             )
 
         self.empty_state.show()
+
+    def _has_transactions(self):
+
+        transactions = (
+            self.history_service.get_all()
+        )
+
+        return bool(
+            transactions
+        )
 
     def _format_transactions(
         self,
