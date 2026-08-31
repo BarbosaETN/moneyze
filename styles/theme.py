@@ -26,6 +26,10 @@ from styles.history  import HISTORY_STYLE
 
 from styles.history_filters import HISTORY_FILTERS_STYLE
 
+from styles.dashboard_summary import DASHBOARD_SUMMARY_STYLE
+
+from styles.dashboard_summary import CASH_FLOW_SECTION_STYLE
+
 
 THEME = f"""
 
@@ -54,6 +58,10 @@ THEME = f"""
 {HISTORY_STYLE}
 
 {HISTORY_FILTERS_STYLE}
+
+{DASHBOARD_SUMMARY_STYLE}
+
+{CASH_FLOW_SECTION_STYLE}
 
 """
 
