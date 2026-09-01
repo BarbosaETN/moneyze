@@ -40,6 +40,8 @@ from styles.dashboard_summary import CASH_FLOW_EMPTY_STATE_STYLE
 
 from styles.dashboard_summary import CATEGORY_EMPTY_STATE_STYLE
 
+from styles.report import REPORT_STYLE
+
 
 THEME = f"""
 
@@ -82,6 +84,8 @@ THEME = f"""
 {CASH_FLOW_EMPTY_STATE_STYLE}
 
 {CATEGORY_EMPTY_STATE_STYLE}
+
+{REPORT_STYLE}
 
 """
 

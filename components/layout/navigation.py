@@ -8,7 +8,7 @@ from views.categories.category_page import CategoryPage
 from views.income.income_page import IncomePage
 from views.expenses.expense_page import ExpensePage
 from views.history.history_page import HistoryPage
-from views.reports.reports_page import ReportsPage
+from views.reports.reports_page import ReportPage
 from views.settings.settings_page import SettingsPage
 
 
@@ -53,7 +53,7 @@ NAVIGATION = [
     NavigationItem(
         id="reports",
         title="Relatórios",
-        page=ReportsPage,
+        page=ReportPage,
     ),
 
     NavigationItem(
