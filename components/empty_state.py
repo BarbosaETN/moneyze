@@ -8,6 +8,7 @@ from PySide6.QtCore import (
 from PySide6.QtWidgets import (
     QLabel,
     QPushButton,
+    QSizePolicy,
     QVBoxLayout,
     QWidget,
 )
@@ -54,12 +55,12 @@ class EmptyState(QWidget):
             24,
         )
 
-        layout.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )
-
         layout.setSpacing(
             12
+        )
+
+        layout.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
         )
 
         self._create_icon()
@@ -126,8 +127,16 @@ class EmptyState(QWidget):
             Qt.AlignmentFlag.AlignCenter
         )
 
+        self.title_label.setSizePolicy(
+            QSizePolicy.Policy.Preferred,
+            QSizePolicy.Policy.Maximum,
+        )
+
         self.layout().addWidget(
-            self.title_label
+            self.title_label,
+            alignment=(
+                Qt.AlignmentFlag.AlignCenter
+            ),
         )
 
     def _create_description(self):
@@ -148,8 +157,13 @@ class EmptyState(QWidget):
             True
         )
 
-        self.description_label.setMaximumWidth(
+        self.description_label.setFixedWidth(
             360
+        )
+
+        self.description_label.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Preferred,
         )
 
         self.layout().addWidget(
@@ -210,3 +224,5 @@ class EmptyState(QWidget):
         self.description_label.setText(
             description
         )
+
+        self.description_label.adjustSize()

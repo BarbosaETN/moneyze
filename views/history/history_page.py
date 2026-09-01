@@ -8,11 +8,16 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
+    QStackedWidget,
     QWidget,
 )
 
 from components.containers.history_grid import (
     HistoryGrid,
+)
+
+from core.data_events import (
+    data_events,
 )
 
 from components.empty_state import (
@@ -57,6 +62,10 @@ class HistoryPage(BasePage):
 
         self._setup_page()
         self._connect_signals()
+
+        data_events.transactions_changed.connect(
+            self.refresh
+        )
 
         self.load_transactions()
 
@@ -171,6 +180,12 @@ class HistoryPage(BasePage):
 
     def _create_history_grid(self):
 
+        self.history_stack = QStackedWidget()
+
+        self.history_stack.setObjectName(
+            "historyStack"
+        )
+
         self.history_grid = (
             HistoryGrid()
         )
@@ -187,15 +202,16 @@ class HistoryPage(BasePage):
             )
         )
 
-        self.empty_state.hide()
+        self.history_stack.addWidget(
+            self.history_grid
+        )
 
-        self.content_layout.addWidget(
-            self.history_grid,
-            1,
+        self.history_stack.addWidget(
+            self.empty_state
         )
 
         self.content_layout.addWidget(
-            self.empty_state,
+            self.history_stack,
             1,
         )
 
@@ -337,17 +353,18 @@ class HistoryPage(BasePage):
     ):
 
         self.headers_widget.show()
-        self.history_grid.show()
-        self.empty_state.hide()
 
         self.history_grid.set_transactions(
             transaction_data
         )
 
+        self.history_stack.setCurrentWidget(
+            self.history_grid
+        )
+
     def _show_empty_state(self):
 
         self.headers_widget.hide()
-        self.history_grid.hide()
 
         if self._has_transactions():
 
@@ -373,7 +390,9 @@ class HistoryPage(BasePage):
                 ),
             )
 
-        self.empty_state.show()
+        self.history_stack.setCurrentWidget(
+            self.empty_state
+        )   
 
     def _has_transactions(self):
 
@@ -423,3 +442,7 @@ class HistoryPage(BasePage):
             )
 
         return transaction_data
+
+    def refresh(self):
+
+        self.load_transactions()

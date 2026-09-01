@@ -14,6 +14,10 @@ from components.navigation.month_selector import MonthSelector
 
 from database.connection import get_session
 
+from core.data_events import (
+    data_events,
+)
+
 from exceptions.moneyze_error import MoneyzeError
 
 from repositories.category_repository import (
@@ -49,6 +53,10 @@ class CategoryPage(BasePage):
 
         self._setup_page()
         self._connect_signals()
+
+        data_events.transactions_changed.connect(
+            self.refresh
+        )
 
         self._update_month_label()
         self.load_categories()
@@ -295,3 +303,7 @@ class CategoryPage(BasePage):
                 error.title,
                 error.message,
             )
+
+    def refresh(self):
+
+        self.load_categories()        

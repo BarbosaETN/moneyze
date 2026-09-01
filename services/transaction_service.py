@@ -10,6 +10,10 @@ from exceptions.validation_error import (
     ValidationError,
 )
 
+from core.data_events import (
+    data_events,
+)
+
 from services.base_service import BaseService
 
 
@@ -24,9 +28,13 @@ class TransactionService(BaseService):
 
         self._validate(data)
 
-        return super().create(
+        transaction = super().create(
             **data
         )
+
+        data_events.transactions_changed.emit()
+
+        return transaction
 
     def get_incomes(
         self,
@@ -106,9 +114,13 @@ class TransactionService(BaseService):
                 "Transação não encontrada."
             )
 
-        return super().delete(
+        result = super().delete(
             transaction
         )
+
+        data_events.transactions_changed.emit()
+
+        return result
 
     def _validate(self, data):
 

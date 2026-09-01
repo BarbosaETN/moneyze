@@ -6,6 +6,7 @@ from PySide6.QtCore import (
 from PySide6.QtWidgets import (
     QGridLayout,
     QScrollArea,
+    QSizePolicy,
     QVBoxLayout,
     QWidget,
 )
@@ -40,10 +41,19 @@ class CategoryGrid(QScrollArea):
             True
         )
 
+        self.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
+
         self.container = QWidget()
 
         self.container.setObjectName(
             "categoryGridContainer"
+        )
+
+        self.container.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Expanding,
         )
 
         self.main_layout = QVBoxLayout(
@@ -110,6 +120,11 @@ class CategoryGrid(QScrollArea):
             icon_color="#64748B",
             button_text="Nova Categoria",
             button_icon="fa5s.plus",
+        )
+
+        self.empty_state.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Expanding,
         )
 
         self.empty_state.action_requested.connect(

@@ -51,6 +51,18 @@ QLabel#historyDate {
 
 }
 
+QLabel#historyHeader {
+    color: #94A3B8;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    background-color: transparent;
+
+    border: none;
+}
+
 
 QLabel#historyTitle {
 
