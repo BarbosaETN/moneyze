@@ -1,11 +1,11 @@
-from PySide6.QtCore import (
-    Qt,
-)
-
 from PySide6.QtWidgets import (
     QLabel,
     QVBoxLayout,
     QWidget,
+)
+
+from components.charts.balance_evolution_chart import (
+    BalanceEvolutionChart,
 )
 
 
@@ -29,13 +29,13 @@ class BalanceEvolutionSection(QWidget):
 
         self.layout.setContentsMargins(
             24,
-            20,
+            18,
             24,
-            20,
+            18,
         )
 
         self.layout.setSpacing(
-            6
+            8
         )
 
         self._create_header()
@@ -70,22 +70,23 @@ class BalanceEvolutionSection(QWidget):
 
     def _create_chart_area(self):
 
-        self.chart_placeholder = QLabel(
-            "Gráfico de evolução do saldo"
+        self.chart = (
+            BalanceEvolutionChart()
         )
 
-        self.chart_placeholder.setObjectName(
-            "reportChartPlaceholder"
-        )
-
-        self.chart_placeholder.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )
-
-        self.chart_placeholder.setMinimumHeight(
-            220
+        self.chart.setMinimumHeight(
+            240
         )
 
         self.layout.addWidget(
-            self.chart_placeholder
+            self.chart
+        )
+
+    def set_balance_data(
+        self,
+        balance_data,
+    ):
+
+        self.chart.set_data(
+            balance_data
         )

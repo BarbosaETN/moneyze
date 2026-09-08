@@ -29,13 +29,13 @@ class MonthlyComparisonSection(QWidget):
 
         self.layout.setContentsMargins(
             24,
-            20,
+            18,
             24,
-            20,
+            18,
         )
 
         self.layout.setSpacing(
-            6
+            8
         )
 
         self._create_header()
@@ -75,12 +75,15 @@ class MonthlyComparisonSection(QWidget):
         )
 
         self.chart.setMinimumHeight(
-            280
+            240
+        )
+
+        self.chart.setMaximumHeight(
+            260
         )
 
         self.layout.addWidget(
-            self.chart,
-            1,
+            self.chart
         )
 
     def set_monthly_data(

@@ -185,3 +185,35 @@ class ReportService:
             for category, amount
             in category_data.items()
         ]
+
+    def get_balance_evolution(
+        self,
+        year: int,
+    ):
+
+        monthly_data = (
+            self.get_income_expense_by_month(
+                year
+            )
+        )
+
+        balance = 0
+
+        result = []
+
+        for month in monthly_data:
+
+            balance += (
+                month["income"]
+                - month["expense"]
+            )
+
+            result.append(
+                {
+                    "month": month["month"],
+                    "label": month["label"],
+                    "balance": balance,
+                }
+            )
+
+        return result

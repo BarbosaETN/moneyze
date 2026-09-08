@@ -34,13 +34,13 @@ class CategoryDistributionSection(QWidget):
 
         self.layout.setContentsMargins(
             24,
-            20,
+            18,
             24,
-            20,
+            18,
         )
 
         self.layout.setSpacing(
-            6
+            8
         )
 
         self._create_header()
@@ -83,13 +83,13 @@ class CategoryDistributionSection(QWidget):
 
         chart_layout.setContentsMargins(
             0,
-            16,
+            12,
             0,
             0,
         )
 
         chart_layout.setSpacing(
-            32
+            28
         )
 
         self.chart = (
@@ -97,6 +97,10 @@ class CategoryDistributionSection(QWidget):
         )
 
         self.chart.setMinimumHeight(
+            220
+        )
+
+        self.chart.setMaximumHeight(
             240
         )
 
@@ -105,6 +109,10 @@ class CategoryDistributionSection(QWidget):
         )
 
         self.category_list.setMinimumHeight(
+            220
+        )
+
+        self.category_list.setMaximumHeight(
             240
         )
 

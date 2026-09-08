@@ -1,5 +1,79 @@
 REPORT_STYLE = """
 
+QScrollArea#reportScrollArea {
+
+    background-color: #0B1220;
+
+    border: none;
+
+}
+
+
+QScrollArea#reportScrollArea QWidget#qt_scrollarea_viewport {
+
+    background-color: #0B1220;
+
+    border: none;
+
+}
+
+
+QScrollArea#reportScrollArea QScrollBar:vertical {
+
+    background-color: transparent;
+
+    width: 8px;
+
+    margin: 4px 2px 4px 2px;
+
+}
+
+
+QScrollArea#reportScrollArea QScrollBar::handle:vertical {
+
+    background-color: #263548;
+
+    border-radius: 4px;
+
+    min-height: 40px;
+
+}
+
+
+QScrollArea#reportScrollArea QScrollBar::handle:vertical:hover {
+
+    background-color: #334155;
+
+}
+
+
+QScrollArea#reportScrollArea QScrollBar::add-line:vertical,
+QScrollArea#reportScrollArea QScrollBar::sub-line:vertical {
+
+    background: none;
+
+    border: none;
+
+    height: 0px;
+
+}
+
+
+QScrollArea#reportScrollArea QScrollBar::add-page:vertical,
+QScrollArea#reportScrollArea QScrollBar::sub-page:vertical {
+
+    background: transparent;
+
+}
+
+
+QWidget#pageContent {
+
+    background-color: #0B1220;
+
+}
+
+
 QWidget#reportSection {
 
     background-color: #182230;
@@ -22,6 +96,8 @@ QLabel#reportSectionTitle {
     background-color: transparent;
 
     border: none;
+
+    margin-bottom: 1px;
 
 }
 
@@ -50,6 +126,7 @@ QLabel#reportChartPlaceholder {
     border: none;
 
 }
+
 
 QWidget#categoryDistributionItem {
 

@@ -7,16 +7,12 @@ from components.cards.category_distribution_item import (
     CategoryDistributionItem,
 )
 
+from core.report_colors import (
+    CATEGORY_COLORS,
+)
+
 
 class CategoryDistributionList(QWidget):
-
-    COLORS = [
-        "#4F8EF7",
-        "#34D399",
-        "#F59E0B",
-        "#A78BFA",
-        "#F0526E",
-    ]
 
     def __init__(self):
 
@@ -71,9 +67,9 @@ class CategoryDistributionList(QWidget):
                 else 0
             )
 
-            color = self.COLORS[
+            color = CATEGORY_COLORS[
                 index % len(
-                    self.COLORS
+                    CATEGORY_COLORS
                 )
             ]
 
@@ -93,7 +89,7 @@ class CategoryDistributionList(QWidget):
 
         self.layout.addStretch()
 
-    def _clear(self):
+    def _clear(self):    
 
         while self.layout.count():
 

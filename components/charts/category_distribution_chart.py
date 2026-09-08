@@ -6,11 +6,16 @@ from PySide6.QtCharts import (
 
 from PySide6.QtCore import (
     Qt,
+    QMargins,
 )
 
 from PySide6.QtGui import (
     QColor,
     QPainter,
+)
+
+from core.report_colors import (
+    CATEGORY_COLORS,
 )
 
 from PySide6.QtWidgets import (
@@ -39,7 +44,7 @@ class CategoryDistributionChart(QWidget):
 
         self.layout.setContentsMargins(
             0,
-            16,
+            0,
             0,
             0,
         )
@@ -80,6 +85,14 @@ class CategoryDistributionChart(QWidget):
             """
         )
 
+        chart_view.setMinimumHeight(
+            220
+        )
+
+        chart_view.setMaximumHeight(
+            240
+        )
+
         self.layout.addWidget(
             chart_view
         )
@@ -109,6 +122,15 @@ class CategoryDistributionChart(QWidget):
             False
         )
 
+        chart.setMargins(
+            QMargins(
+                0,
+                0,
+                0,
+                0,
+            )
+        )
+
         series = (
             self._create_series(
                 category_data
@@ -133,19 +155,8 @@ class CategoryDistributionChart(QWidget):
         )
 
         series.setPieSize(
-            0.75
+            0.60
         )
-
-        colors = [
-            "#3B82F6",
-            "#34D399",
-            "#F59E0B",
-            "#F87171",
-            "#A78BFA",
-            "#22D3EE",
-            "#FB7185",
-            "#A3E635",
-        ]
 
         for index, category in enumerate(
             category_data
@@ -158,8 +169,8 @@ class CategoryDistributionChart(QWidget):
                 ),
             )
 
-            color = colors[
-                index % len(colors)
+            color = CATEGORY_COLORS[
+                index % len(CATEGORY_COLORS)
             ]
 
             slice_.setColor(
