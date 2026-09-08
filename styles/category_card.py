@@ -1,17 +1,16 @@
 from styles.colors import (
-    TEXT,
-    SECONDARY_TEXT,
     SUCCESS,
     WARNING,
     DANGER,
 )
 
 
-CATEGORY_CARD_STYLE = f"""
+def get_category_card_style(theme):
+    return f"""
 
 #categoryTitle {{
 
-    color: {TEXT};
+    color: {theme["text"]};
 
     font-size: 18px;
 
@@ -22,7 +21,7 @@ CATEGORY_CARD_STYLE = f"""
 
 #categoryBudget {{
 
-    color: {SECONDARY_TEXT};
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
 
@@ -31,7 +30,7 @@ CATEGORY_CARD_STYLE = f"""
 
 #categorySectionTitle {{
 
-    color: {SECONDARY_TEXT};
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
 
@@ -40,7 +39,7 @@ CATEGORY_CARD_STYLE = f"""
 
 #categoryExpenseValue {{
 
-    color: {TEXT};
+    color: {theme["text"]};
 
     font-size: 16px;
 
@@ -81,7 +80,7 @@ CATEGORY_CARD_STYLE = f"""
 
 #categoryRemaining {{
 
-    color: {SECONDARY_TEXT};
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
 
@@ -119,6 +118,7 @@ QFrame#baseCard[budgetStatus="danger"] {{
 
 }}
 
+
 QScrollArea#categoryGrid {{
 
     background-color: transparent;
@@ -133,6 +133,7 @@ QWidget#categoryGridContainer {{
     background-color: transparent;
 
 }}
+
 
 #categoryExceeded {{
 

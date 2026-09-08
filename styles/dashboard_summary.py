@@ -1,53 +1,63 @@
-DASHBOARD_SUMMARY_STYLE = """
+from styles.colors import (
+    SUCCESS,
+    WARNING,
+    DANGER,
+)
 
-QWidget#dashboardSummaryCard {
-    background-color: #182230;
 
-    border: 1px solid #263548;
+def get_dashboard_summary_style(theme):
+    return f"""
+
+QWidget#dashboardSummaryCard {{
+    background-color: {theme["card"]};
+
+    border: 1px solid {theme["border"]};
 
     border-radius: 14px;
-}
+}}
 
 
-QLabel#dashboardSummaryTitle {
-    color: #94A3B8;
+QLabel#dashboardSummaryTitle {{
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
 
     font-weight: 500;
-}
+}}
 
 
-QLabel#dashboardSummaryAmount {
-    color: #F8FAFC;
+QLabel#dashboardSummaryAmount {{
+    color: {theme["text"]};
 
     font-size: 24px;
 
     font-weight: 700;
-}
+}}
 
 
-QLabel#dashboardSummaryVariation {
+QLabel#dashboardSummaryVariation {{
     font-size: 12px;
 
     font-weight: 600;
-}
+}}
 
 """
 
-CASH_FLOW_SECTION_STYLE = """
 
-QFrame#cashFlowSection {
-    background-color: #182230;
+def get_cash_flow_section_style(theme):
+    return f"""
 
-    border: 1px solid #263548;
+QFrame#cashFlowSection {{
+    background-color: {theme["card"]};
+
+    border: 1px solid {theme["border"]};
 
     border-radius: 14px;
-}
+}}
 
 
-QLabel#dashboardSectionTitle {
-    color: #E5E7EB;
+QLabel#dashboardSectionTitle {{
+    color: {theme["text"]};
 
     font-size: 16px;
 
@@ -56,46 +66,49 @@ QLabel#dashboardSectionTitle {
     border: none;
 
     background: transparent;
-}
+}}
 
 
-QLabel#dashboardSectionSubtitle {
-    color: #94A3B8;
+QLabel#dashboardSectionSubtitle {{
+    color: {theme["secondary_text"]};
 
     font-size: 12px;
 
     border: none;
 
     background: transparent;
-}
+}}
 
 
-QLabel#cashFlowPlaceholder {
-    color: #64748B;
+QLabel#cashFlowPlaceholder {{
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
 
     border: none;
 
     background: transparent;
-}
+}}
 
 """
 
-DASHBOARD_CATEGORY_LIST_STYLE = """
 
-QScrollArea#dashboardCategoryList {
+def get_dashboard_category_list_style(theme):
+    return f"""
+
+QScrollArea#dashboardCategoryList {{
     background-color: transparent;
+
     border: none;
-}
+}}
 
 
-QWidget#dashboardCategoryListContent {
+QWidget#dashboardCategoryListContent {{
     background-color: transparent;
-}
+}}
 
 
-QScrollArea#dashboardCategoryList QScrollBar:vertical {
+QScrollArea#dashboardCategoryList QScrollBar:vertical {{
     background-color: transparent;
 
     width: 8px;
@@ -103,53 +116,55 @@ QScrollArea#dashboardCategoryList QScrollBar:vertical {
     margin: 4px 0px 4px 0px;
 
     border: none;
-}
+}}
 
 
-QScrollArea#dashboardCategoryList QScrollBar::handle:vertical {
-    background-color: #263548;
+QScrollArea#dashboardCategoryList QScrollBar::handle:vertical {{
+    background-color: {theme["border"]};
 
     border-radius: 4px;
 
     min-height: 30px;
-}
+}}
 
 
-QScrollArea#dashboardCategoryList QScrollBar::handle:vertical:hover {
-    background-color: #334155;
-}
+QScrollArea#dashboardCategoryList QScrollBar::handle:vertical:hover {{
+    background-color: {theme["secondary_text"]};
+}}
 
 
 QScrollArea#dashboardCategoryList QScrollBar::add-line:vertical,
-QScrollArea#dashboardCategoryList QScrollBar::sub-line:vertical {
+QScrollArea#dashboardCategoryList QScrollBar::sub-line:vertical {{
     height: 0px;
 
     background-color: transparent;
 
     border: none;
-}
+}}
 
 
 QScrollArea#dashboardCategoryList QScrollBar::add-page:vertical,
-QScrollArea#dashboardCategoryList QScrollBar::sub-page:vertical {
+QScrollArea#dashboardCategoryList QScrollBar::sub-page:vertical {{
     background-color: transparent;
-}
+}}
 
 """
 
-DASHBOARD_CATEGORY_CARD_STYLE = """
 
-QFrame#dashboardCategoryCard {
-    background-color: #182230;
+def get_dashboard_category_card_style(theme):
+    return f"""
 
-    border: 1px solid #263548;
+QFrame#dashboardCategoryCard {{
+    background-color: {theme["card"]};
+
+    border: 1px solid {theme["border"]};
 
     border-radius: 12px;
-}
+}}
 
 
-QLabel#dashboardCategoryName {
-    color: #E5E7EB;
+QLabel#dashboardCategoryName {{
+    color: {theme["text"]};
 
     font-size: 13px;
 
@@ -158,15 +173,11 @@ QLabel#dashboardCategoryName {
     background-color: transparent;
 
     border: none;
-}
+}}
 
 
-/* =========================
-   PORCENTAGEM NORMAL
-========================= */
-
-QLabel#dashboardCategoryPercentage {
-    color: #94A3B8;
+QLabel#dashboardCategoryPercentage {{
+    color: {theme["secondary_text"]};
 
     font-size: 12px;
 
@@ -175,15 +186,11 @@ QLabel#dashboardCategoryPercentage {
     background-color: transparent;
 
     border: none;
-}
+}}
 
 
-/* =========================
-   PORCENTAGEM EM ALERTA
-========================= */
-
-QLabel#dashboardCategoryPercentageWarning {
-    color: #FBBF24;
+QLabel#dashboardCategoryPercentageWarning {{
+    color: {WARNING};
 
     font-size: 12px;
 
@@ -192,15 +199,11 @@ QLabel#dashboardCategoryPercentageWarning {
     background-color: transparent;
 
     border: none;
-}
+}}
 
 
-/* =========================
-   ORÇAMENTO ULTRAPASSADO
-========================= */
-
-QLabel#dashboardCategoryPercentageExceeded {
-    color: #F87171;
+QLabel#dashboardCategoryPercentageExceeded {{
+    color: {DANGER};
 
     font-size: 12px;
 
@@ -209,26 +212,22 @@ QLabel#dashboardCategoryPercentageExceeded {
     background-color: transparent;
 
     border: none;
-}
+}}
 
 
-/* =========================
-   TEXTO DO ORÇAMENTO
-========================= */
-
-QLabel#dashboardCategoryBudget {
-    color: #64748B;
+QLabel#dashboardCategoryBudget {{
+    color: {theme["secondary_text"]};
 
     font-size: 11px;
 
     background-color: transparent;
 
     border: none;
-}
+}}
 
 
-QLabel#dashboardCategoryBudgetExceeded {
-    color: #F87171;
+QLabel#dashboardCategoryBudgetExceeded {{
+    color: {DANGER};
 
     font-size: 11px;
 
@@ -237,108 +236,100 @@ QLabel#dashboardCategoryBudgetExceeded {
     background-color: transparent;
 
     border: none;
-}
+}}
 
 
-/* =========================
-   BARRA NORMAL
-========================= */
-
-QProgressBar#dashboardCategoryProgress {
-    background-color: #263548;
+QProgressBar#dashboardCategoryProgress {{
+    background-color: {theme["progress_background"]};
 
     border: none;
 
     border-radius: 4px;
 
     height: 8px;
-}
+}}
 
 
-QProgressBar#dashboardCategoryProgress::chunk {
-    background-color: #34D399;
+QProgressBar#dashboardCategoryProgress::chunk {{
+    background-color: {SUCCESS};
 
     border-radius: 4px;
-}
+}}
 
 
-/* =========================
-   BARRA EM ALERTA
-========================= */
-
-QProgressBar#dashboardCategoryProgressWarning {
-    background-color: #263548;
+QProgressBar#dashboardCategoryProgressWarning {{
+    background-color: {theme["progress_background"]};
 
     border: none;
 
     border-radius: 4px;
 
     height: 8px;
-}
+}}
 
 
-QProgressBar#dashboardCategoryProgressWarning::chunk {
-    background-color: #FBBF24;
+QProgressBar#dashboardCategoryProgressWarning::chunk {{
+    background-color: {WARNING};
 
     border-radius: 4px;
-}
+}}
 
 
-/* =========================
-   BARRA ULTRAPASSADA
-========================= */
-
-QProgressBar#dashboardCategoryProgressExceeded {
-    background-color: #263548;
+QProgressBar#dashboardCategoryProgressExceeded {{
+    background-color: {theme["progress_background"]};
 
     border: none;
 
     border-radius: 4px;
 
     height: 8px;
-}
+}}
 
 
-QProgressBar#dashboardCategoryProgressExceeded::chunk {
-    background-color: #F87171;
+QProgressBar#dashboardCategoryProgressExceeded::chunk {{
+    background-color: {DANGER};
 
     border-radius: 4px;
-}
+}}
 
 """
 
-CATEGORY_SECTION_STYLE = """
 
-QFrame#categorySection {
+def get_category_section_style(theme):
+    return f"""
+
+QFrame#categorySection {{
     background-color: transparent;
 
     border: none;
-}
+}}
 
 
-QLabel#categoryEmptyState {
-    color: #64748B;
+QLabel#categoryEmptyState {{
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
 
     background-color: transparent;
 
     border: none;
-}
+}}
 
 """
 
-CASH_FLOW_EMPTY_STATE_STYLE = """
 
-QWidget#cashFlowEmptyState {
+def get_cash_flow_empty_state_style(theme):
+    return f"""
+
+QWidget#cashFlowEmptyState {{
     background-color: transparent;
 
     border: none;
-}
+}}
 
 
-QLabel#cashFlowEmptyStateTitle {
-    color: #CBD5E1;
+QLabel#cashFlowEmptyStateTitle {{
+    color: {theme["text"]};
 
     font-size: 14px;
 
@@ -347,32 +338,34 @@ QLabel#cashFlowEmptyStateTitle {
     background-color: transparent;
 
     border: none;
-}
+}}
 
 
-QLabel#cashFlowEmptyStateDescription {
-    color: #64748B;
+QLabel#cashFlowEmptyStateDescription {{
+    color: {theme["secondary_text"]};
 
     font-size: 12px;
 
     background-color: transparent;
 
     border: none;
-}
+}}
 
 """
 
-CATEGORY_EMPTY_STATE_STYLE = """
 
-QWidget#categoryEmptyState {
+def get_category_empty_state_style(theme):
+    return f"""
+
+QWidget#categoryEmptyState {{
     background-color: transparent;
 
     border: none;
-}
+}}
 
 
-QLabel#categoryEmptyStateTitle {
-    color: #CBD5E1;
+QLabel#categoryEmptyStateTitle {{
+    color: {theme["text"]};
 
     font-size: 14px;
 
@@ -381,17 +374,17 @@ QLabel#categoryEmptyStateTitle {
     background-color: transparent;
 
     border: none;
-}
+}}
 
 
-QLabel#categoryEmptyStateDescription {
-    color: #64748B;
+QLabel#categoryEmptyStateDescription {{
+    color: {theme["secondary_text"]};
 
     font-size: 12px;
 
     background-color: transparent;
 
     border: none;
-}
+}}
 
 """

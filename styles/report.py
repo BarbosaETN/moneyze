@@ -1,24 +1,25 @@
-REPORT_STYLE = """
+def get_report_style(theme):
+    return f"""
 
-QScrollArea#reportScrollArea {
+QScrollArea#reportScrollArea {{
 
-    background-color: #0B1220;
-
-    border: none;
-
-}
-
-
-QScrollArea#reportScrollArea QWidget#qt_scrollarea_viewport {
-
-    background-color: #0B1220;
+    background-color: {theme["background"]};
 
     border: none;
 
-}
+}}
 
 
-QScrollArea#reportScrollArea QScrollBar:vertical {
+QScrollArea#reportScrollArea QWidget#qt_scrollarea_viewport {{
+
+    background-color: {theme["background"]};
+
+    border: none;
+
+}}
+
+
+QScrollArea#reportScrollArea QScrollBar:vertical {{
 
     background-color: transparent;
 
@@ -26,29 +27,29 @@ QScrollArea#reportScrollArea QScrollBar:vertical {
 
     margin: 4px 2px 4px 2px;
 
-}
+}}
 
 
-QScrollArea#reportScrollArea QScrollBar::handle:vertical {
+QScrollArea#reportScrollArea QScrollBar::handle:vertical {{
 
-    background-color: #263548;
+    background-color: {theme["border"]};
 
     border-radius: 4px;
 
     min-height: 40px;
 
-}
+}}
 
 
-QScrollArea#reportScrollArea QScrollBar::handle:vertical:hover {
+QScrollArea#reportScrollArea QScrollBar::handle:vertical:hover {{
 
-    background-color: #334155;
+    background-color: {theme["secondary_text"]};
 
-}
+}}
 
 
 QScrollArea#reportScrollArea QScrollBar::add-line:vertical,
-QScrollArea#reportScrollArea QScrollBar::sub-line:vertical {
+QScrollArea#reportScrollArea QScrollBar::sub-line:vertical {{
 
     background: none;
 
@@ -56,38 +57,38 @@ QScrollArea#reportScrollArea QScrollBar::sub-line:vertical {
 
     height: 0px;
 
-}
+}}
 
 
 QScrollArea#reportScrollArea QScrollBar::add-page:vertical,
-QScrollArea#reportScrollArea QScrollBar::sub-page:vertical {
+QScrollArea#reportScrollArea QScrollBar::sub-page:vertical {{
 
     background: transparent;
 
-}
+}}
 
 
-QWidget#pageContent {
+QWidget#pageContent {{
 
-    background-color: #0B1220;
+    background-color: {theme["background"]};
 
-}
+}}
 
 
-QWidget#reportSection {
+QWidget#reportSection {{
 
-    background-color: #182230;
+    background-color: {theme["card"]};
 
-    border: 1px solid #263548;
+    border: 1px solid {theme["border"]};
 
     border-radius: 14px;
 
-}
+}}
 
 
-QLabel#reportSectionTitle {
+QLabel#reportSectionTitle {{
 
-    color: #E5E7EB;
+    color: {theme["text"]};
 
     font-size: 18px;
 
@@ -99,25 +100,12 @@ QLabel#reportSectionTitle {
 
     margin-bottom: 1px;
 
-}
+}}
 
 
-QLabel#reportSectionSubtitle {
+QLabel#reportSectionSubtitle {{
 
-    color: #94A3B8;
-
-    font-size: 13px;
-
-    background-color: transparent;
-
-    border: none;
-
-}
-
-
-QLabel#reportChartPlaceholder {
-
-    color: #64748B;
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
 
@@ -125,49 +113,62 @@ QLabel#reportChartPlaceholder {
 
     border: none;
 
-}
+}}
 
 
-QWidget#categoryDistributionItem {
+QLabel#reportChartPlaceholder {{
 
-    background-color: transparent;
-
-}
-
-
-QLabel#categoryDistributionName {
-
-    color: #94A3B8;
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
 
-}
+    background-color: transparent;
+
+    border: none;
+
+}}
 
 
-QLabel#categoryDistributionPercentage {
+QWidget#categoryDistributionItem {{
 
-    color: #E5E7EB;
+    background-color: transparent;
+
+}}
+
+
+QLabel#categoryDistributionName {{
+
+    color: {theme["secondary_text"]};
+
+    font-size: 13px;
+
+}}
+
+
+QLabel#categoryDistributionPercentage {{
+
+    color: {theme["text"]};
 
     font-size: 13px;
 
     font-weight: bold;
 
-}
+}}
 
 
-QFrame#categoryDistributionProgressBackground {
+QFrame#categoryDistributionProgressBackground {{
 
-    background-color: #263548;
-
-    border-radius: 2px;
-
-}
-
-
-QFrame#categoryDistributionProgressBar {
+    background-color: {theme["progress_background"]};
 
     border-radius: 2px;
 
-}
+}}
+
+
+QFrame#categoryDistributionProgressBar {{
+
+    border-radius: 2px;
+
+}}
 
 """

@@ -1,8 +1,3 @@
-from styles.colors import (
-    TEXT,
-    SECONDARY_TEXT,
-)
-
 from styles.fonts import (
     TITLE_SIZE,
     SUBTITLE_SIZE,
@@ -10,7 +5,8 @@ from styles.fonts import (
 )
 
 
-HEADER_STYLE = f"""
+def get_header_style(theme):
+    return f"""
 
 #pageHeader {{
 
@@ -21,7 +17,7 @@ HEADER_STYLE = f"""
 
 #headerTitle {{
 
-    color: {TEXT};
+    color: {theme["text"]};
 
     font-size: {TITLE_SIZE}px;
 
@@ -34,7 +30,7 @@ HEADER_STYLE = f"""
 
 #headerSubtitle {{
 
-    color: {SECONDARY_TEXT};
+    color: {theme["secondary_text"]};
 
     font-size: {SUBTITLE_SIZE}px;
 
@@ -45,7 +41,7 @@ HEADER_STYLE = f"""
 
 #basePage {{
 
-    background-color: #0B1220;
+    background-color: {theme["background"]};
 
 }}
 

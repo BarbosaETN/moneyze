@@ -1,13 +1,11 @@
-from styles.colors import BORDER, CARD
-
-
-CARD_STYLE = f"""
+def get_card_style(theme):
+    return f"""
 
 #baseCard {{
 
-    background-color: {CARD};
+    background-color: {theme["card"]};
 
-    border: 1px solid {BORDER};
+    border: 1px solid {theme["border"]};
 
     border-radius: 16px;
 

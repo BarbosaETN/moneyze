@@ -1,40 +1,39 @@
-from styles.colors import (
-    CARD,
-    BORDER,
-    TEXT,
-    SECONDARY_TEXT,
-    PRIMARY,
-)
+from styles.colors import PRIMARY
 
 
-MONTH_SELECTOR_STYLE = f"""
+def get_month_selector_style(theme):
+    return f"""
 
 #monthSelector {{
     background-color: transparent;
 }}
 
-QPushButton#monthNavigationButton {{
-    background-color: {CARD};
-    color: {TEXT};
 
-    border: 1px solid {BORDER};
+QPushButton#monthNavigationButton {{
+    background-color: {theme["card"]};
+    color: {theme["text"]};
+
+    border: 1px solid {theme["border"]};
     border-radius: 10px;
 
     font-size: 24px;
     font-weight: bold;
 }}
 
+
 QPushButton#monthNavigationButton:hover {{
     border-color: {PRIMARY};
     color: {PRIMARY};
 }}
 
+
 QPushButton#monthNavigationButton:pressed {{
-    background-color: {BORDER};
+    background-color: {theme["border"]};
 }}
 
+
 #monthLabel {{
-    color: {TEXT};
+    color: {theme["text"]};
 
     font-size: 16px;
     font-weight: bold;

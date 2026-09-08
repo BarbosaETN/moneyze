@@ -1,29 +1,30 @@
-SIDEBAR_STYLE = """
+def get_sidebar_style(theme):
+    return f"""
 
-#appCentralWidget {
+#appCentralWidget {{
 
-    background-color: #0B1220;
+    background-color: {theme["background"]};
 
-}
-
-
-#contentStack {
-
-    background-color: #0B1220;
-
-}
+}}
 
 
-#sidebar {
+#contentStack {{
 
-    background-color: #0A0F1C;
+    background-color: {theme["background"]};
 
-    border-right: 1px solid #1E293B;
-
-}
+}}
 
 
-#logoIcon {
+#sidebar {{
+
+    background-color: {theme["sidebar_background"]};
+
+    border-right: 1px solid {theme["sidebar_border"]};
+
+}}
+
+
+#logoIcon {{
 
     background-color: #16C79A;
 
@@ -43,38 +44,38 @@ SIDEBAR_STYLE = """
 
     max-height: 32px;
 
-}
+}}
 
 
-#logoTitle {
+#logoTitle {{
 
-    color: #F8FAFC;
+    color: {theme["user_name"]};
 
     font-size: 18px;
 
     font-weight: bold;
 
-}
+}}
 
 
-#sidebarDivider {
+#sidebarDivider {{
 
-    color: #1E293B;
+    color: {theme["sidebar_border"]};
 
-    background-color: #1E293B;
+    background-color: {theme["sidebar_border"]};
 
     max-height: 1px;
 
     border: none;
 
-}
+}}
 
 
-QPushButton#navigationButton {
+QPushButton#navigationButton {{
 
     background-color: transparent;
 
-    color: #94A3B8;
+    color: {theme["sidebar_text"]};
 
     border: none;
 
@@ -88,56 +89,57 @@ QPushButton#navigationButton {
 
     font-size: 14px;
 
-}
+}}
 
 
-QPushButton#navigationButton:hover {
+QPushButton#navigationButton:hover {{
 
-    background-color: #111C2B;
+    background-color: {theme["sidebar_hover"]};
 
-    color: #E2E8F0;
+    color: {theme["sidebar_text_hover"]};
 
-}
+}}
 
 
-QPushButton#navigationButton:checked {
+QPushButton#navigationButton:checked {{
 
-    background-color: #0D3A35;
+    background-color: {theme["sidebar_active"]};
 
-    color: #27D9AD;
+    color: {theme["sidebar_active_text"]};
 
     font-weight: bold;
 
-}
+}}
 
 
-#userCard {
+#userCard {{
 
-    background-color: #172236;
+    background-color: {theme["user_card"]};
 
-    border: 1px solid #243247;
+    border: 1px solid {theme["user_card_border"]};
 
     border-radius: 16px;
 
-}
+}}
 
 
-#userName {
+#userName {{
 
-    color: #F8FAFC;
+    color: {theme["user_name"]};
 
     font-size: 14px;
 
     font-weight: bold;
 
-}
+}}
 
 
-#userStatus {
+#userStatus {{
 
-    color: #64748B;
+    color: {theme["user_status"]};
 
     font-size: 12px;
 
-}
+}}
+
 """
