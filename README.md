@@ -272,31 +272,31 @@ As principais telas do MoneyZe serão apresentadas nesta seção.
 
 ### Dashboard
 
-![alt text](image.png)
+![Dashboard](assets/screenshots/dashboard.png)
 
 ### Receitas
 
-![alt text](image-1.png)
+![Receitas](assets/screenshots/receitas.png)
 
 ### Despesas
 
-![alt text](image-2.png)
+![Despesas](assets/screenshots/despesas.png)
 
 ### Histórico
 
-![alt text](image-3.png)
+![Histórico](assets/screenshots/historico.png)
 
 ### Relatórios
 
-![alt text](image-4.png)
+![Relatórios](assets/screenshots/relatorios.png)
 
 ### Categorias
 
-![alt text](image-5.png)
+![Categorias](assets/screenshots/categorias.png)
 
 ### Configurações
 
-![alt text](image-6.png)
+![Configurações](assets/screenshots/configuracoes.png)
 
 ---
 
@@ -399,4 +399,6 @@ Desenvolvido por **Estevan Saldanha** como projeto de desenvolvimento e portfól
 
 ## 📄 Licença
 
-A licença do projeto será definida na Release 1.0.0.
+Este projeto está licenciado sob a licença MIT.
+
+Consulte o arquivo [LICENSE](LICENSE) para mais informações.
