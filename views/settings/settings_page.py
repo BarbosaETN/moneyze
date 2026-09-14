@@ -13,7 +13,10 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from core.config import DATABASE_PATH
+from core.config import (
+    APP_VERSION,
+    DATABASE_PATH,
+)
 from services.backup_service import BackupService
 
 from database.connection import get_session
@@ -243,6 +246,39 @@ class SettingsPage(BasePage):
         card_layout.addWidget(
             restore_button,
             alignment=Qt.AlignmentFlag.AlignLeft,
+        )
+
+        card_layout.addWidget(
+            restore_button,
+            alignment=Qt.AlignmentFlag.AlignLeft,
+        )
+
+        card_layout.addSpacing(
+            24
+        )
+
+        about_title = QLabel(
+            "Sobre o MoneyZe"
+        )
+
+        about_title.setObjectName(
+            "backupTitle"
+        )
+
+        about_version = QLabel(
+            f"MoneyZe v{APP_VERSION}"
+        )
+
+        about_version.setObjectName(
+            "backupDescription"
+        )
+
+        card_layout.addWidget(
+            about_title
+        )
+
+        card_layout.addWidget(
+            about_version
         )
 
         self.content_layout.addWidget(
