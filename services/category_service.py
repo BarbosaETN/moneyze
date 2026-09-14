@@ -115,6 +115,18 @@ class CategoryService(BaseService):
                 "Categoria não encontrada."
             )
 
+        transactions = (
+            self.transaction_repository
+            .get_by_category(category_id)
+        )
+
+        if transactions:
+
+            raise BusinessError(
+                "Não é possível excluir uma categoria "
+                "que possui transações vinculadas."
+            )
+
         return super().delete(
             category
         )
