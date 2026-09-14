@@ -1,12 +1,20 @@
+from PySide6.QtCore import Qt
+
 from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
+    QFileDialog,
     QFormLayout,
     QFrame,
     QLabel,
     QLineEdit,
+    QMessageBox,
+    QPushButton,
     QVBoxLayout,
 )
+
+from core.config import DATABASE_PATH
+from services.backup_service import BackupService
 
 from database.connection import get_session
 from repositories.settings_repository import SettingsRepository
@@ -19,7 +27,6 @@ from styles.theme import (
     apply_theme,
 )
 
-
 class SettingsPage(BasePage):
     def __init__(self):
         super().__init__(
@@ -30,6 +37,7 @@ class SettingsPage(BasePage):
         self.session = get_session()
         self.repository = SettingsRepository(self.session)
         self.service = SettingsService(self.repository)
+        self.backup_service = BackupService(DATABASE_PATH)
 
         self._loading_settings = True
 
@@ -151,6 +159,92 @@ class SettingsPage(BasePage):
             form_layout
         )
 
+        card_layout.addSpacing(
+            24
+        )
+
+        backup_title = QLabel(
+            "Backup e restauração"
+        )
+
+        backup_title.setObjectName(
+            "backupTitle"
+        )
+
+        backup_description = QLabel(
+            "Proteja seus dados criando uma cópia do banco."
+        )
+
+        backup_description.setObjectName(
+            "backupDescription"
+        )
+
+        backup_button = QPushButton(
+            "Fazer backup"
+        )
+
+        backup_button.setObjectName(
+            "backupButton"
+        )
+
+        backup_button.clicked.connect(
+            self._create_backup
+        )
+
+        restore_description = QLabel(
+            "Restaure seus dados a partir de um backup existente."
+        )
+
+        restore_description.setObjectName(
+            "backupDescription"
+        )
+
+        restore_button = QPushButton(
+            "Restaurar backup"
+        )
+
+        restore_button.setObjectName(
+            "restoreButton"
+        )
+
+        restore_button.clicked.connect(
+            self._restore_backup
+        )
+
+        card_layout.addWidget(
+            backup_title
+        )
+
+        card_layout.addWidget(
+            backup_description
+        )
+
+        card_layout.addSpacing(
+            10
+        )
+
+        card_layout.addWidget(
+            backup_button,
+            alignment=Qt.AlignmentFlag.AlignLeft,
+        )
+
+        card_layout.addSpacing(
+            14
+        )
+
+        card_layout.addWidget(
+            restore_description
+        )
+
+        card_layout.addSpacing(
+            10
+        )
+
+        card_layout.addWidget(
+            restore_button,
+            alignment=Qt.AlignmentFlag.AlignLeft,
+        )
+
         self.content_layout.addWidget(
             preferences_card
         )
@@ -262,3 +356,103 @@ class SettingsPage(BasePage):
                 app,
                 selected_theme,
             )
+
+    def _create_backup(self):
+        directory = QFileDialog.getExistingDirectory(
+            self,
+            "Escolher local para salvar o backup",
+        )
+
+        if not directory:
+            return
+
+        try:
+            backup_path = self.backup_service.create_backup(
+                directory
+            )
+
+            QMessageBox.information(
+                self,
+                "Backup realizado",
+                (
+                    "Backup criado com sucesso!\n\n"
+                    f"Arquivo: {backup_path.name}"
+                ),
+            )
+
+        except Exception as error:
+            QMessageBox.critical(
+                self,
+                "Erro ao criar backup",
+                (
+                    "Não foi possível criar o backup.\n\n"
+                    f"Erro: {error}"
+                ),
+            )
+
+    def _restore_backup(self):
+        backup_path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Selecionar backup",
+            "",
+            "Banco SQLite (*.db)",
+        )
+
+        if not backup_path:
+            return
+
+        if not self.backup_service.validate_backup(
+            backup_path
+        ):
+            QMessageBox.warning(
+                self,
+                "Backup inválido",
+                "O arquivo selecionado não é um backup válido do MoneyZe.",
+            )
+            return
+
+        confirmation = QMessageBox.question(
+            self,
+            "Confirmar restauração",
+            (
+                "A restauração substituirá os dados atuais "
+                "do MoneyZe.\n\n"
+                "Essa ação não pode ser desfeita. "
+                "Deseja continuar?"
+            ),
+            QMessageBox.StandardButton.Yes
+            | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+
+        if confirmation != QMessageBox.StandardButton.Yes:
+            return
+
+        try:
+            self.backup_service.restore_backup(
+                backup_path
+            )
+
+            QMessageBox.information(
+                self,
+                "Restauração concluída",
+                (
+                    "O backup foi restaurado com sucesso.\n\n"
+                    "O MoneyZe será recarregado."
+                ),
+            )
+
+            window = self.window()
+
+            if hasattr(window, "reload_pages"):
+                window.reload_pages()
+
+        except Exception as error:
+            QMessageBox.critical(
+                self,
+                "Erro na restauração",
+                (
+                    "Não foi possível restaurar o backup.\n\n"
+                    f"Erro: {error}"
+                ),
+            )                

@@ -93,6 +93,19 @@ class MainWindow(QMainWindow):
                 page
             )
 
+    def reload_pages(self):
+        while self.content.count():
+            widget = self.content.widget(0)
+
+            self.content.removeWidget(widget)
+            widget.deleteLater()
+
+        self.pages.clear()
+
+        self._create_pages()
+
+        self.change_page("dashboard")        
+
     def change_page(
         self,
         page_id: str,

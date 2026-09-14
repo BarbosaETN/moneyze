@@ -63,4 +63,52 @@ QFrame#settingsCard QComboBox:disabled {{
     background-color: {theme["card"]};
     color: {theme["secondary_text"]};
 }}
+
+QLabel#backupTitle {{
+    color: {theme["text"]};
+    font-size: 16px;
+    font-weight: 700;
+}}
+
+QLabel#backupDescription {{
+    color: {theme["secondary_text"]};
+    font-size: 13px;
+}}
+
+QPushButton#backupButton {{
+    background-color: #16C79A;
+    color: #07111F;
+    border: none;
+    border-radius: 10px;
+    min-height: 40px;
+    padding-left: 18px;
+    padding-right: 18px;
+    font-size: 13px;
+    font-weight: 700;
+}}
+
+QPushButton#backupButton:hover {{
+    background-color: #20D9AA;
+}}
+
+QPushButton#backupButton:pressed {{
+    background-color: #12A982;
+}}
+
+QPushButton#restoreButton {{
+    background-color: transparent;
+    color: {theme["text"]};
+    border: 1px solid {theme["border"]};
+    border-radius: 10px;
+    min-height: 40px;
+    padding-left: 18px;
+    padding-right: 18px;
+    font-size: 13px;
+    font-weight: 600;
+}}
+
+QPushButton#restoreButton:hover {{
+    background-color: {theme["background"]};
+    border-color: {theme["secondary_text"]};
+}}
 """
