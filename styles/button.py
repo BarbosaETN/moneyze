@@ -5,7 +5,8 @@ from styles.colors import (
 )
 
 
-BUTTON_STYLE = f"""
+def get_button_style(theme):
+    return f"""
 
 QPushButton#primaryButton {{
 
@@ -23,11 +24,13 @@ QPushButton#primaryButton {{
 
 }}
 
+
 QPushButton#primaryButton:hover {{
 
     background-color: {PRIMARY_HOVER};
 
 }}
+
 
 QPushButton#primaryButton:pressed {{
 

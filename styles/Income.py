@@ -1,158 +1,183 @@
-INCOME_STYLE = """
+from styles.colors import (
+    SUCCESS,
+)
 
-QScrollArea#incomeGrid {
+
+def get_income_style(theme):
+    return f"""
+
+QScrollArea#incomeGrid {{
 
     background-color: transparent;
 
     border-radius: 16px;
-}
+
+}}
 
 
-QScrollArea#incomeGrid QWidget#qt_scrollarea_viewport {
+QScrollArea#incomeGrid QWidget#qt_scrollarea_viewport {{
 
-    background-color: #111827;
-}
+    background-color: {theme["background"]};
 
-
-QWidget#incomeGridContainer {
-
-    background-color: #111827;
-}
+}}
 
 
-QWidget#incomeHeader {
+QWidget#incomeGridContainer {{
 
-    background-color: #182230;
+    background-color: {theme["background"]};
 
-    border: 1px solid #263548;
+}}
+
+
+QWidget#incomeHeader {{
+
+    background-color: {theme["card"]};
+
+    border: 1px solid {theme["border"]};
 
     border-bottom: none;
 
     border-top-left-radius: 16px;
 
     border-top-right-radius: 16px;
-}
+
+}}
 
 
-QLabel#incomeHeaderLabel {
+QLabel#incomeHeaderLabel {{
 
-    color: #94A3B8;
+    color: {theme["secondary_text"]};
 
     font-size: 11px;
 
     font-weight: bold;
 
     letter-spacing: 1px;
-}
+
+}}
 
 
-QWidget#incomeCard {
+QWidget#incomeCard {{
 
-    background-color: #111827;
+    background-color: {theme["background"]};
 
     border: none;
 
-    border-bottom: 1px solid #263548;
+    border-bottom: 1px solid {theme["border"]};
 
     border-radius: 0;
-}
+
+}}
 
 
-QWidget#incomeCard:hover {
+QWidget#incomeCard:hover {{
 
-    background-color: #182230;
-}
+    background-color: {theme["card"]};
+
+}}
 
 
-QLabel#incomeTitle {
+QLabel#incomeTitle {{
 
-    color: #E5E7EB;
+    color: {theme["text"]};
 
     font-size: 14px;
 
     font-weight: bold;
-}
+
+}}
 
 
-QLabel#incomeDate {
+QLabel#incomeDate {{
 
-    color: #64748B;
+    color: {theme["secondary_text"]};
 
     font-size: 12px;
-}
+
+}}
 
 
-QLabel#incomeCategory {
+QLabel#incomeCategory {{
 
-    color: #94A3B8;
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
-}
+
+}}
 
 
-QLabel#incomeAmount {
+QLabel#incomeAmount {{
 
-    color: #34D399;
+    color: {SUCCESS};
 
     font-size: 13px;
 
     font-weight: bold;
-}
+
+}}
 
 
-QLabel#incomeIcon {
+QLabel#incomeIcon {{
 
     background-color: #123D35;
 
     border-radius: 10px;
-}
+
+}}
 
 
-QPushButton#incomeDeleteButton {
+QPushButton#incomeDeleteButton {{
 
     background-color: transparent;
 
     border: none;
 
     border-radius: 8px;
-}
+
+}}
 
 
-QPushButton#incomeDeleteButton:hover {
+QPushButton#incomeDeleteButton:hover {{
 
-    background-color: #263548;
-}
+    background-color: {theme["border"]};
 
-
-QPushButton#incomeDeleteButton:pressed {
-
-    background-color: #334155;
-}
+}}
 
 
-QScrollBar:vertical {
+QPushButton#incomeDeleteButton:pressed {{
+
+    background-color: {theme["secondary_text"]};
+
+}}
+
+
+QScrollBar:vertical {{
 
     background-color: transparent;
 
     width: 8px;
 
     margin: 4px;
-}
+
+}}
 
 
-QScrollBar::handle:vertical {
+QScrollBar::handle:vertical {{
 
-    background-color: #334155;
+    background-color: {theme["border"]};
 
     border-radius: 4px;
 
     min-height: 30px;
-}
+
+}}
 
 
 QScrollBar::add-line:vertical,
-QScrollBar::sub-line:vertical {
+QScrollBar::sub-line:vertical {{
 
     height: 0px;
-}
+
+}}
+
 """

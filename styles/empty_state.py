@@ -1,43 +1,35 @@
-EMPTY_STATE_STYLE = """
+def get_empty_state_style(theme):
+    return f"""
 
-QWidget#emptyState {
-
+QWidget#emptyState {{
     background-color: transparent;
+}}
 
-}
 
-
-QLabel#emptyStateIcon {
-
-    background-color: #182230;
+QLabel#emptyStateIcon {{
+    background-color: {theme["card"]};
 
     border-radius: 28px;
+}}
 
-}
 
-
-QLabel#emptyStateTitle {
-
-    color: #E2E8F0;
+QLabel#emptyStateTitle {{
+    color: {theme["text"]};
 
     font-size: 18px;
 
     font-weight: bold;
+}}
 
-}
 
-
-QLabel#emptyStateDescription {
-
-    color: #94A3B8;
+QLabel#emptyStateDescription {{
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
+}}
 
-}
 
-
-QPushButton#emptyStateButton {
-
+QPushButton#emptyStateButton {{
     background-color: #2563EB;
 
     color: #FFFFFF;
@@ -51,21 +43,16 @@ QPushButton#emptyStateButton {
     font-size: 13px;
 
     font-weight: bold;
+}}
 
-}
 
-
-QPushButton#emptyStateButton:hover {
-
+QPushButton#emptyStateButton:hover {{
     background-color: #1D4ED8;
+}}
 
-}
 
-
-QPushButton#emptyStateButton:pressed {
-
+QPushButton#emptyStateButton:pressed {{
     background-color: #1E40AF;
-
-}
+}}
 
 """

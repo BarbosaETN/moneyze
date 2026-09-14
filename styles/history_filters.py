@@ -1,34 +1,48 @@
-HISTORY_FILTERS_STYLE = """
+from styles.colors import PRIMARY
 
-QWidget#historyFilters {
+
+def get_history_filters_style(theme):
+    return f"""
+
+QWidget#historyFilters {{
+
     background-color: transparent;
-}
 
-QLineEdit#historySearchInput {
-    background-color: #182230;
+}}
 
-    color: #E5E7EB;
 
-    border: 1px solid #263548;
+QLineEdit#historySearchInput {{
+
+    background-color: {theme["card"]};
+
+    color: {theme["text"]};
+
+    border: 1px solid {theme["border"]};
 
     border-radius: 10px;
 
     padding: 10px 14px;
 
     font-size: 10pt;
-}
 
-QLineEdit#historySearchInput:focus {
-    border: 1px solid #34D399;
-}
+}}
+
+
+QLineEdit#historySearchInput:focus {{
+
+    border: 1px solid {PRIMARY};
+
+}}
+
 
 QComboBox#historyTypeFilter,
-QComboBox#historyPeriodFilter {
-    background-color: #182230;
+QComboBox#historyPeriodFilter {{
 
-    color: #E5E7EB;
+    background-color: {theme["card"]};
 
-    border: 1px solid #263548;
+    color: {theme["text"]};
+
+    border: 1px solid {theme["border"]};
 
     border-radius: 10px;
 
@@ -37,31 +51,41 @@ QComboBox#historyPeriodFilter {
     min-width: 120px;
 
     font-size: 10pt;
-}
+
+}}
+
 
 QComboBox#historyTypeFilter:hover,
-QComboBox#historyPeriodFilter:hover {
-    border: 1px solid #334155;
-}
+QComboBox#historyPeriodFilter:hover {{
+
+    border: 1px solid {theme["secondary_text"]};
+
+}}
+
 
 QComboBox#historyTypeFilter::drop-down,
-QComboBox#historyPeriodFilter::drop-down {
+QComboBox#historyPeriodFilter::drop-down {{
+
     border: none;
 
     width: 30px;
-}
+
+}}
+
 
 QComboBox#historyTypeFilter QAbstractItemView,
-QComboBox#historyPeriodFilter QAbstractItemView {
-    background-color: #182230;
+QComboBox#historyPeriodFilter QAbstractItemView {{
 
-    color: #E5E7EB;
+    background-color: {theme["card"]};
 
-    border: 1px solid #263548;
+    color: {theme["text"]};
 
-    selection-background-color: #263548;
+    border: 1px solid {theme["border"]};
+
+    selection-background-color: {theme["border"]};
 
     font-size: 10pt;
-}
+
+}}
 
 """

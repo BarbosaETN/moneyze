@@ -13,6 +13,9 @@ from components.layout.navigation import NAVIGATION
 
 from core.config import SIDEBAR_WIDTH
 
+from database.connection import get_session
+from repositories.settings_repository import SettingsRepository
+from services.settings_service import SettingsService
 
 class Sidebar(QWidget):
 
@@ -192,7 +195,7 @@ class Sidebar(QWidget):
         user_layout.setSpacing(4)
 
         user_name = QLabel(
-            "Estevan"
+            self._get_user_name()
         )
 
         user_name.setObjectName(
@@ -245,3 +248,18 @@ class Sidebar(QWidget):
             button.setChecked(
                 button_id == page_id
             )
+
+    def _get_user_name(self):
+        session = get_session()
+
+        repository = SettingsRepository(session)
+        service = SettingsService(repository)
+
+        name = service.get_setting(
+            "user_name",
+            "Usuário",
+        )
+
+        session.close()
+
+        return name.strip() or "Usuário"        

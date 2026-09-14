@@ -1,31 +1,36 @@
-SUMMARY_CARD_STYLE = """
+def get_summary_card_style(theme):
+    return f"""
 
-QWidget#summaryCard {
+QWidget#summaryCard {{
 
-    background-color: #182230;
+    background-color: {theme["card"]};
 
-    border: 1px solid #263548;
+    border: 1px solid {theme["border"]};
 
     border-radius: 16px;
-}
+
+}}
 
 
-QLabel#summaryTitle {
+QLabel#summaryTitle {{
 
-    color: #94A3B8;
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
 
     font-weight: 500;
-}
+
+}}
 
 
-QLabel#summaryAmount {
+QLabel#summaryAmount {{
 
     color: #34D399;
 
     font-size: 26px;
 
     font-weight: bold;
-}
+
+}}
+
 """

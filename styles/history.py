@@ -1,58 +1,67 @@
-HISTORY_STYLE = """
+from styles.colors import (
+    SUCCESS,
+    DANGER,
+)
 
-QScrollArea#historyGrid {
+
+def get_history_style(theme):
+    return f"""
+
+QScrollArea#historyGrid {{
 
     background-color: transparent;
 
     border: none;
 
-}
+}}
 
 
-QScrollArea#historyGrid QWidget#qt_scrollarea_viewport {
+QScrollArea#historyGrid QWidget#qt_scrollarea_viewport {{
 
-    background-color: #111827;
+    background-color: {theme["background"]};
 
-}
-
-
-QWidget#historyGridContainer {
-
-    background-color: #111827;
-
-}
+}}
 
 
-QWidget#historyCard {
+QWidget#historyGridContainer {{
 
-    background-color: #111827;
+    background-color: {theme["background"]};
+
+}}
+
+
+QWidget#historyCard {{
+
+    background-color: {theme["background"]};
 
     border: none;
 
-    border-bottom: 1px solid #263548;
+    border-bottom: 1px solid {theme["border"]};
 
     border-radius: 0;
 
-}
+}}
 
 
-QWidget#historyCard:hover {
+QWidget#historyCard:hover {{
 
-    background-color: #182230;
+    background-color: {theme["card"]};
 
-}
+}}
 
 
-QLabel#historyDate {
+QLabel#historyDate {{
 
-    color: #64748B;
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
 
-}
+}}
 
-QLabel#historyHeader {
-    color: #94A3B8;
+
+QLabel#historyHeader {{
+
+    color: {theme["secondary_text"]};
 
     font-size: 12px;
 
@@ -61,52 +70,53 @@ QLabel#historyHeader {
     background-color: transparent;
 
     border: none;
-}
+
+}}
 
 
-QLabel#historyTitle {
+QLabel#historyTitle {{
 
-    color: #E5E7EB;
+    color: {theme["text"]};
 
     font-size: 14px;
 
     font-weight: bold;
 
-}
+}}
 
 
-QLabel#historyCategory {
+QLabel#historyCategory {{
 
-    color: #94A3B8;
-
-    font-size: 13px;
-
-}
-
-
-QLabel#historyIncomeAmount {
-
-    color: #34D399;
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
 
-    font-weight: bold;
-
-}
+}}
 
 
-QLabel#historyExpenseAmount {
+QLabel#historyIncomeAmount {{
 
-    color: #F87171;
+    color: {SUCCESS};
 
     font-size: 13px;
 
     font-weight: bold;
 
-}
+}}
 
 
-QScrollBar:vertical {
+QLabel#historyExpenseAmount {{
+
+    color: {DANGER};
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+}}
+
+
+QScrollBar:vertical {{
 
     background-color: transparent;
 
@@ -114,25 +124,25 @@ QScrollBar:vertical {
 
     margin: 4px;
 
-}
+}}
 
 
-QScrollBar::handle:vertical {
+QScrollBar::handle:vertical {{
 
-    background-color: #334155;
+    background-color: {theme["border"]};
 
     border-radius: 4px;
 
     min-height: 30px;
 
-}
+}}
 
 
 QScrollBar::add-line:vertical,
-QScrollBar::sub-line:vertical {
+QScrollBar::sub-line:vertical {{
 
     height: 0px;
 
-}
+}}
 
 """

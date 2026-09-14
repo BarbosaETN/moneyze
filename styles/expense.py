@@ -1,133 +1,153 @@
-EXPENSE_STYLE = """
+from styles.colors import DANGER
 
-QScrollArea#expenseGrid {
+
+def get_expense_style(theme):
+    return f"""
+
+QScrollArea#expenseGrid {{
 
     background-color: transparent;
 
     border-radius: 16px;
-}
+
+}}
 
 
-QScrollArea#expenseGrid QWidget#qt_scrollarea_viewport {
+QScrollArea#expenseGrid QWidget#qt_scrollarea_viewport {{
 
-    background-color: #111827;
-}
+    background-color: {theme["background"]};
 
-
-QWidget#expenseGridContainer {
-
-    background-color: #111827;
-}
+}}
 
 
-QWidget#expenseCard {
+QWidget#expenseGridContainer {{
 
-    background-color: #111827;
+    background-color: {theme["background"]};
+
+}}
+
+
+QWidget#expenseCard {{
+
+    background-color: {theme["background"]};
 
     border: none;
 
-    border-bottom: 1px solid #263548;
+    border-bottom: 1px solid {theme["border"]};
 
     border-radius: 0;
-}
+
+}}
 
 
-QWidget#expenseCard:hover {
+QWidget#expenseCard:hover {{
 
-    background-color: #182230;
-}
+    background-color: {theme["card"]};
+
+}}
 
 
-QLabel#expenseTitle {
+QLabel#expenseTitle {{
 
-    color: #E5E7EB;
+    color: {theme["text"]};
 
     font-size: 14px;
 
     font-weight: bold;
-}
+
+}}
 
 
-QLabel#expenseDate {
+QLabel#expenseDate {{
 
-    color: #64748B;
+    color: {theme["secondary_text"]};
 
     font-size: 12px;
-}
+
+}}
 
 
-QLabel#expenseCategory {
+QLabel#expenseCategory {{
 
-    color: #94A3B8;
+    color: {theme["secondary_text"]};
 
     font-size: 13px;
-}
+
+}}
 
 
-QLabel#expenseAmount {
+QLabel#expenseAmount {{
 
-    color: #F87171;
+    color: {DANGER};
 
     font-size: 13px;
 
     font-weight: bold;
-}
+
+}}
 
 
-QLabel#expenseIcon {
+QLabel#expenseIcon {{
 
     background-color: #3D2028;
 
     border-radius: 10px;
-}
+
+}}
 
 
-QPushButton#expenseDeleteButton {
+QPushButton#expenseDeleteButton {{
 
     background-color: transparent;
 
     border: none;
 
     border-radius: 8px;
-}
+
+}}
 
 
-QPushButton#expenseDeleteButton:hover {
+QPushButton#expenseDeleteButton:hover {{
 
-    background-color: #263548;
-}
+    background-color: {theme["border"]};
 
-
-QPushButton#expenseDeleteButton:pressed {
-
-    background-color: #334155;
-}
+}}
 
 
-QScrollBar:vertical {
+QPushButton#expenseDeleteButton:pressed {{
+
+    background-color: {theme["secondary_text"]};
+
+}}
+
+
+QScrollBar:vertical {{
 
     background-color: transparent;
 
     width: 8px;
 
     margin: 4px;
-}
+
+}}
 
 
-QScrollBar::handle:vertical {
+QScrollBar::handle:vertical {{
 
-    background-color: #334155;
+    background-color: {theme["border"]};
 
     border-radius: 4px;
 
     min-height: 30px;
-}
+
+}}
 
 
 QScrollBar::add-line:vertical,
-QScrollBar::sub-line:vertical {
+QScrollBar::sub-line:vertical {{
 
     height: 0px;
-}
+
+}}
 
 """
